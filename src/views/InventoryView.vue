@@ -1,5 +1,5 @@
 <script setup>
-import { ref, computed, nextTick, onMounted } from 'vue'
+import { ref, computed, nextTick, onMounted, onUnmounted } from 'vue'
 import { onClickOutside } from '@vueuse/core'
 import { useProductsStore } from '@/data/products.js'
 import {
@@ -61,6 +61,10 @@ const onSearchInput = (event) => {
 
 onMounted(async () => {
 	await productsStore.init()
+})
+
+onUnmounted(() => {
+	productsStore.unsubscribe()
 })
 </script>
 

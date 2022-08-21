@@ -13,27 +13,41 @@ export const useProductsStore = defineStore({
 	}),
 	actions: {
 		async init() {
-			await this.fetch()
-			await this.subscribe()
-		},
-		async fetch() {
 			this.loading = true
-			const { data, error } = await supabase.from('products').select()
-			console.log(data)
+			// Fetch data
+			const { data, error } = await supabase.from('products').select('*')
+
 			this.products = data
 			this.error = error
-			this.loading = false
-		},
-		async subscribe() {
+
+			// Subscribe to changes
 			this.subscription = supabase
 				.from('products')
 				.on('INSERT', (payload) => {
-					this.products.push(payload)
+					this.products.push(payload.new)
+				})
+				.on('UPDATE', (payload) => {
+					this.products.splice(
+						this.products.findIndex((p) => p.id === payload.old.id),
+						1,
+						payload.new
+					)
+				})
+				.on('DELETE', (payload) => {
+					this.products.splice(
+						this.products.findIndex((p) => p.id === payload.old.id),
+						1
+					)
 				})
 				.subscribe()
+
+			this.loading = false
 		},
 		async unsubscribe() {
 			supabase.removeSubscription(this.subscription)
+		},
+		async save(product) {
+			const { data, error } = await supabase.from('products').insert([product])
 		},
 		async delete(id) {
 			this.products = this.products.filter((p) => p.id != id)
