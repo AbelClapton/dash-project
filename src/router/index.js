@@ -16,12 +16,22 @@ const router = createRouter({
 		},
 		{
 			path: '/products',
-			name: 'productos',
+			name: 'products',
 			component: () => import('../views/InventoryView.vue'),
 		},
 		{
+			path: '/products/:id',
+			name: 'product',
+			component: () => import('../views/ProductView.vue'),
+		},
+		{
 			path: '/products/add',
-			name: 'nuevo producto',
+			name: 'new product',
+			component: () => import('../views/NewProductView.vue'),
+		},
+		{
+			path: '/products/:id/edit',
+			name: 'edit product',
 			component: () => import('../views/NewProductView.vue'),
 		},
 		{

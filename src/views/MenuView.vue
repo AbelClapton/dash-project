@@ -1,3 +1,102 @@
+<script setup>
+import { ref, computed, onMounted, onUnmounted } from 'vue'
+import { CalendarIcon } from '@heroicons/vue/outline'
+import BoxIcon from '@/components/icons/BoxIcon.vue'
+import DolarIcon from '@/components/icons/DolarIcon.vue'
+import interact from 'interactjs'
+
+// eslint-disable-next-line no-unused-vars
+const props = defineProps({
+	isOpen: {
+		type: Boolean,
+		default: false,
+	},
+})
+
+// eslint-disable-next-line no-unused-vars
+const emit = defineEmits(['close'])
+
+const interactElement = ref(null)
+const interactPosition = ref(0)
+
+const transformString = computed(() => {
+	return `translateY(${interactPosition.value}px)`
+})
+
+onMounted(() => {
+	interact('#menu').draggable({
+		onmove: (event) => {
+			interactSetPosition(interactPosition.value + event.dy)
+		},
+		onend: () => {
+			if (interactPosition.value > 200) emit('close')
+			resetMenuPosition()
+		},
+	})
+})
+
+onUnmounted(() => {
+	interact('#menu').unset()
+})
+
+function interactSetPosition(coordinates) {
+	interactPosition.value = coordinates
+}
+
+function resetMenuPosition() {
+	interactSetPosition(0)
+}
+</script>
+
 <template>
-	<div>Menu View</div>
+	<div>
+		<div
+			id="menu"
+			class="absolute left-0 transition-all ease-in-out touch-none text-white"
+			:class="[isOpen ? 'top-0' : 'top-full']"
+			:style="{ transform: transformString }"
+			ref="interactElement"
+			v-if="isOpen"
+		>
+			<div class="h-screen w-screen bg-gray-800 rounded-t-2xl">
+				<div class="flex w-full justify-center pt-1">
+					<div class="bg-gray-500 rounded h-1 w-10"></div>
+				</div>
+				<div class="py-4">
+					<div class="flex flex-col">
+						<router-link
+							to="/products"
+							class="flex items-center gap-4 hover:bg-slate-600 px-6 py-3"
+							@click="$emit('close')"
+						>
+							<BoxIcon class="h-5 w-5" />
+							<span>Inventario</span>
+						</router-link>
+						<router-link
+							to="/finance"
+							class="flex items-center gap-4 hover:bg-slate-600 px-6 py-3"
+							@click="$emit('close')"
+						>
+							<DolarIcon class="h-5 w-5" />
+							<span>Finanzas</span>
+						</router-link>
+						<router-link
+							to="calendar"
+							class="flex items-center gap-4 hover:bg-slate-600 px-6 py-3"
+							@click="$emit('close')"
+						>
+							<CalendarIcon class="h-5 w-5" />
+							<span>Calendario</span>
+						</router-link>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
 </template>
+
+<style>
+.router-link-active {
+	@apply bg-slate-600;
+}
+</style>

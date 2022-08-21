@@ -21,7 +21,7 @@ const props = defineProps({
 	},
 	placeholder: {
 		type: String,
-		default: 'Selecciona una opción',
+		default: 'Seleccionar',
 	},
 	multiple: Boolean,
 	label: {
@@ -47,7 +47,7 @@ const label = computed(() => {
 
 <template>
 	<div class="w-full text-lg">
-		<label v-if="props.label">{{ props.label }}:</label>
+		<label class="font-light" v-if="props.label">{{ props.label }}:</label>
 		<Listbox
 			:multiple="props.multiple"
 			@update:modelValue="(value) => $emit('update:modelValue', value)"
@@ -58,8 +58,12 @@ const label = computed(() => {
 				<ListboxButton
 					class="relative w-full cursor-default rounded-lg bg-white py-2 pl-3 pr-10 text-left border focus:outline-none focus-visible:border-indigo-500 focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 focus-visible:ring-offset-2 focus-visible:ring-offset-orange-300 sm:text-sm"
 				>
-					<span class="block truncate" v-if="label">{{ label }}</span>
-					<span class="text-gray-500" v-else>{{ props.placeholder }}</span>
+					<span class="block truncate font-light text-black" v-if="label">{{
+						label
+					}}</span>
+					<span class="font-light text-gray-400" v-else>{{
+						props.placeholder
+					}}</span>
 					<span
 						class="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2"
 					>
@@ -84,7 +88,7 @@ const label = computed(() => {
 							<li
 								:class="[
 									active ? 'bg-amber-100 text-amber-900' : 'text-gray-900',
-									'relative cursor-default select-none py-2 pl-10 pr-4',
+									'relative cursor-default py-2 pl-10 pr-4',
 								]"
 							>
 								<span
