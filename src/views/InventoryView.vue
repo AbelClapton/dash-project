@@ -1,5 +1,5 @@
 <script setup>
-import { ref, computed, nextTick, onMounted, onUnmounted } from 'vue'
+import { ref, computed, nextTick } from 'vue'
 import { onClickOutside } from '@vueuse/core'
 import { useProductsStore } from '@/data/products.js'
 import {
@@ -9,8 +9,9 @@ import {
 	PlusIcon,
 	XIcon,
 } from '@heroicons/vue/outline'
-import FilterIcon from '@/components/icons/FilterIcon.vue'
 import ProductsList from '@/components/ProductsList.vue'
+import BaseSpinner from '@/components/BaseSpinner.vue'
+import FilterIcon from '@/components/icons/FilterIcon.vue'
 
 const productsStore = useProductsStore()
 
@@ -58,14 +59,6 @@ const showSearch = () => {
 const onSearchInput = (event) => {
 	filters.value.name = event.target.value
 }
-
-onMounted(async () => {
-	await productsStore.init()
-})
-
-onUnmounted(() => {
-	productsStore.unsubscribe()
-})
 </script>
 
 <template>
@@ -112,7 +105,17 @@ onUnmounted(() => {
 		<!-- End of Header -->
 
 		<!-- Products -->
-		<ProductsList :products="products" @delete="productsStore.deleteMultiple" />
+		<transition name="fade">
+			<BaseSpinner
+				class="absolute top-1/2 left-1/2 h-12 w-12 text-cyan-500"
+				v-if="productsStore.loading"
+			/>
+		</transition>
+		<ProductsList
+			v-if="!productsStore.loading"
+			:products="products"
+			@delete="productsStore.deleteMultiple"
+		/>
 		<!-- End of Products -->
 
 		<!-- Search Input -->

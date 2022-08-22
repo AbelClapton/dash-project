@@ -30,13 +30,23 @@
 
 <script setup>
 import { ref, onMounted, nextTick, onBeforeUnmount } from 'vue'
+import { useProductsStore } from '@/data/products.js'
+import { useBrandsStore } from '@/data/brands.js'
+import { useCategoriesStore } from '@/data/categories.js'
 import { MenuIcon } from '@heroicons/vue/outline'
 import MenuView from '@/views/MenuView.vue'
+
+const productsStore = useProductsStore()
+const brandsStore = useBrandsStore()
+const categoriesStore = useCategoriesStore()
 
 const isMenuOpen = ref(false)
 const windowHeight = ref(window.innerHeight)
 
 onMounted(() => {
+	productsStore.init()
+	brandsStore.init()
+	categoriesStore.init()
 	nextTick(() => {
 		window.addEventListener('resize', onResize)
 	})
@@ -44,6 +54,9 @@ onMounted(() => {
 
 onBeforeUnmount(() => {
 	window.removeEventListener('resize', onResize)
+	productsStore.unsubsribe()
+	brandsStore.unsubsribe()
+	categoriesStore.unsubsribe()
 })
 
 const onResize = () => {
@@ -60,15 +73,5 @@ body {
 
 #app {
 	@apply h-full w-screen;
-}
-
-.fade-enter-from,
-.fade-leave-to {
-	opacity: 0;
-}
-
-.fade-enter-active,
-.fade-leave-active {
-	transition: opacity 0.1s ease-in-out;
 }
 </style>

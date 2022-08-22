@@ -1,14 +1,19 @@
 <script setup>
 import { ref, watch } from 'vue'
 import { useRouter } from 'vue-router'
-import TagIcon from '@/components/icons/TagIcon.vue'
+import { TagIcon } from '@heroicons/vue/outline'
 import DolarIcon from '@/components/icons/DolarIcon.vue'
 import BoxIcon from '@/components/icons/BoxIcon.vue'
+import { useBrandsStore } from '@/data/brands.js'
+import { useCategoriesStore } from '@/data/categories.js'
 
 const props = defineProps({
 	product: Object,
 	isSelecting: Boolean,
 })
+
+const brandsStore = useBrandsStore()
+const categoriesStore = useCategoriesStore()
 
 const emit = defineEmits(['selectOn', 'select', 'unselect'])
 
@@ -45,20 +50,27 @@ const clicked = () => {
 
 <template>
 	<div
-		class="pt-2 pb-2 px-3 rounded transition-colors"
-		:class="[isSelected ? 'bg-cyan-600' : 'bg-slate-800']"
+		class="py-2 px-3 rounded transition-colors"
+		:class="[
+			isSelected ? 'bg-cyan-600' : 'bg-slate-800',
+			props.product.alertTreshold >= props.product.stock
+				? 'border-l-2 border-red-500'
+				: '',
+		]"
 		v-touch:hold="enterSelectMode"
 		@click="clicked"
 	>
-		<span class="font-regular">{{ props.product.name }}</span>
+		<span class="font-regular">
+			{{ brandsStore.get(props.product.brand) }} - {{ props.product.name }}
+		</span>
 		<div class="flex gap-3">
-			<div class="flex  items-center text-gray-300 font-light gap-1">
+			<div class="flex items-center text-gray-300 font-light gap-1">
 				<TagIcon class="h-4 w-4" />
-				<span class="">{{ props.product.category }}</span>
+				<span>{{ categoriesStore.get(props.product.category) }}</span>
 			</div>
 			<div class="flex items-center text-gray-300 font-light">
 				<DolarIcon class="h-4 w-4" />
-				<span class="">{{ props.product.price }}</span>
+				<span>{{ props.product.price }}</span>
 			</div>
 			<div class="flex items-center text-gray-300 font-light gap-1 pl-1">
 				<BoxIcon class="h-4 w-4" />

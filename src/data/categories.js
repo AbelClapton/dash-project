@@ -3,10 +3,10 @@ import useClient from '@/libraries/supabase.js'
 
 const supabase = useClient()
 
-export const useProductsStore = defineStore({
-	id: 'products',
+export const useCategoriesStore = defineStore({
+	id: 'categories',
 	state: () => ({
-		products: [],
+		categories: [],
 		error: null,
 		loading: false,
 		subscription: null,
@@ -15,27 +15,27 @@ export const useProductsStore = defineStore({
 		async init() {
 			this.loading = true
 			// Fetch data
-			const { data, error } = await supabase.from('products').select('*')
+			const { data, error } = await supabase.from('categories').select('*')
 
-			this.products = data
+			this.categories = data
 			this.error = error
 
 			// Subscribe to changes
 			this.subscription = supabase
-				.from('products')
+				.from('categories')
 				.on('INSERT', (payload) => {
-					this.products.push(payload.new)
+					this.categories.push(payload.new)
 				})
 				.on('UPDATE', (payload) => {
-					this.products.splice(
-						this.products.findIndex((p) => p.id === payload.old.id),
+					this.categories.splice(
+						this.categories.findIndex((p) => p.id === payload.new.id),
 						1,
 						payload.new
 					)
 				})
 				.on('DELETE', (payload) => {
-					this.products.splice(
-						this.products.findIndex((p) => p.id === payload.old.id),
+					this.categories.splice(
+						this.categories.findIndex((p) => p.id === payload.old.id),
 						1
 					)
 				})
@@ -46,22 +46,22 @@ export const useProductsStore = defineStore({
 		unsubscribe() {
 			supabase.removeSubscription(this.subscription)
 		},
-		async save(product) {
+		async save(category) {
 			this.loading = true
-			const { error } = await supabase.from('products').insert([product])
+			const { error } = await supabase.from('categories').insert([category])
 			this.error = error
 			this.loading = false
 		},
-		async update(product) {
+		async update(category) {
 			const { error } = await supabase
-				.from('products')
-				.update(product)
-				.match({ id: product.id })
+				.from('categories')
+				.update(category)
+				.match({ id: category.id })
 			this.error = error
 		},
 		async delete(id) {
 			this.loading = true
-			this.error = await supabase.from('products').delete().match({ id })
+			this.error = await supabase.from('categories').delete().match({ id })
 			this.loading = false
 		},
 		async deleteMultiple(ids = []) {
@@ -71,6 +71,6 @@ export const useProductsStore = defineStore({
 		},
 	},
 	getters: {
-		get: (state) => (id) => state.products.find((p) => p.id == id),
+		get: (state) => (id) => state.categories.find((p) => p.id == id).name,
 	},
 })

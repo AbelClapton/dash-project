@@ -2,22 +2,15 @@
 import { ref, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useProductsStore } from '@/data/products.js'
+import { useBrandsStore } from '@/data/brands.js'
+import { useCategoriesStore } from '@/data/categories.js'
 import BaseInput from '@/components/base/BaseInput.vue'
 import BaseListBox from '@/components/base/BaseListBox.vue'
 
-const categories = [
-	{ value: 1, label: 'Higiene' },
-	{ value: 2, label: 'Comida' },
-	{ value: 3, label: 'Otros' },
-]
-
-const brands = [
-	{ value: 1, label: 'Sedal' },
-	{ value: 2, label: 'Rexona' },
-	{ value: 3, label: 'Prodal' },
-]
-
 const productsStore = useProductsStore()
+const brandsStore = useBrandsStore()
+const categoriesStore = useCategoriesStore()
+
 const product = ref({
 	name: '',
 	category: '',
@@ -31,6 +24,8 @@ const route = useRoute()
 const router = useRouter()
 
 const save = async () => {
+	if (route.params.id) await productsStore.update(product.value)
+	else await productsStore.save(product.value)
 	router.back()
 }
 
@@ -60,9 +55,14 @@ onMounted(() => {
 				/>
 				<BaseListBox
 					label="Categoria"
-					:options="categories"
+					:options="categoriesStore.categories"
 					v-model="product.category"
 					placeholder="Seleccionar categoría"
+				/>
+				<BaseListBox
+					label="Marca"
+					:options="brandsStore.brands"
+					v-model="product.brand"
 				/>
 				<div class="flex gap-8">
 					<BaseInput
@@ -72,26 +72,12 @@ onMounted(() => {
 						step=".01"
 						v-model="product.price"
 					/>
-					<BaseListBox
-						label="Marca"
-						:options="brands"
-						v-model="product.brand"
-					/>
-				</div>
-				<div class="flex gap-8">
 					<BaseInput
-						label="Limite para aviso"
+						label="Límite para aviso"
 						type="number"
 						min="0"
 						step="1"
 						v-model="product.warningTreshold"
-					/>
-					<BaseInput
-						label="Limite para alerta"
-						type="number"
-						min="0"
-						step="1"
-						v-model="product.alertTreshold"
 					/>
 				</div>
 			</div>

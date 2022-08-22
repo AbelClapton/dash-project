@@ -27,7 +27,7 @@ const remove = () => {
 
 <template>
 	<div class="flex items-center justify-between">
-		<div class="text-lg font-semibold h-5 ">
+		<div class="text-lg font-semibold h-5">
 			{{ product.name }}
 		</div>
 		<div class="flex items-center gap-2">

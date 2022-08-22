@@ -37,10 +37,10 @@ const label = computed(() => {
 	return props.options
 		.filter((option) =>
 			Array.isArray(props.modelValue)
-				? props.modelValue.includes(option.value)
-				: props.modelValue === option.value
+				? props.modelValue.includes(option.id)
+				: props.modelValue === option.id
 		)
-		.map((option) => option.label)
+		.map((option) => option.name)
 		.join(', ')
 })
 </script>
@@ -81,8 +81,8 @@ const label = computed(() => {
 						<ListboxOption
 							v-slot="{ active, selected }"
 							v-for="option in options"
-							:key="option.label"
-							:value="option.value"
+							:key="option.id"
+							:value="option.id"
 							as="template"
 						>
 							<li
@@ -96,7 +96,7 @@ const label = computed(() => {
 										selected ? 'font-medium' : 'font-normal',
 										'block truncate',
 									]"
-									>{{ option.label }}</span
+									>{{ option.name }}</span
 								>
 								<span
 									v-if="selected"

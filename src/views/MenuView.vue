@@ -1,6 +1,6 @@
 <script setup>
 import { ref, computed, onMounted, onUnmounted } from 'vue'
-import { CalendarIcon } from '@heroicons/vue/outline'
+import { CalendarIcon, TagIcon, ShoppingBagIcon } from '@heroicons/vue/outline'
 import BoxIcon from '@/components/icons/BoxIcon.vue'
 import DolarIcon from '@/components/icons/DolarIcon.vue'
 import interact from 'interactjs'
@@ -71,6 +71,22 @@ function resetMenuPosition() {
 						>
 							<BoxIcon class="h-5 w-5" />
 							<span>Inventario</span>
+						</router-link>
+						<router-link
+							to="/brands"
+							class="flex items-center gap-4 hover:bg-slate-600 px-6 py-3"
+							@click="$emit('close')"
+						>
+							<ShoppingBagIcon class="h-5 w-5" />
+							<span>Marcas</span>
+						</router-link>
+						<router-link
+							to="/categories"
+							class="flex items-center gap-4 hover:bg-slate-600 px-6 py-3"
+							@click="$emit('close')"
+						>
+							<TagIcon class="h-5 w-5" />
+							<span>Categorías</span>
 						</router-link>
 						<router-link
 							to="/finance"

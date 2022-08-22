@@ -1,9 +1,6 @@
 <script setup>
 defineProps({
-	label: {
-		type: [String, Boolean],
-		default: 'false',
-	},
+	label: String,
 	modelValue: {
 		type: [String, Number],
 		default: '',
@@ -12,7 +9,7 @@ defineProps({
 </script>
 
 <template>
-	<div>
+	<div class="w-full">
 		<label class="font-light" v-if="label">{{ label }}:</label>
 		<input
 			class="pl-3 py-2 text-lg text-black font-light w-full border rounded-lg"
