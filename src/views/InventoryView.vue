@@ -63,7 +63,6 @@ const onSearchInput = (event) => {
 
 <template>
 	<div class="h-full pb-20">
-		<!-- Header -->
 		<div class="flex items-center justify-between">
 			<div class="text-lg font-semibold h-5">Inventario</div>
 			<div class="flex items-center gap-2">
@@ -102,20 +101,24 @@ const onSearchInput = (event) => {
 				</div>
 			</div>
 		</div>
-		<!-- End of Header -->
 
 		<!-- Products -->
-		<transition name="fade">
-			<BaseSpinner
-				class="absolute top-1/2 left-1/2 h-12 w-12 text-cyan-500"
-				v-if="productsStore.loading"
-			/>
-		</transition>
-		<ProductsList
-			v-if="!productsStore.loading"
-			:products="products"
-			@delete="productsStore.deleteMultiple"
-		/>
+		<div class="flex items-center justify-center h-full w-full">
+			<transition name="fade">
+				<BaseSpinner
+					class="absolute top-1/2 left-1/2 h-12 w-12 text-cyan-500"
+					v-if="productsStore.loading"
+				/>
+				<ProductsList
+					v-else-if="productsStore.products.length"
+					:products="products"
+					@delete="productsStore.deleteMultiple"
+				/>
+				<div v-else class="text-gray-500">
+					No existen productos registrados.
+				</div>
+			</transition>
+		</div>
 		<!-- End of Products -->
 
 		<!-- Search Input -->

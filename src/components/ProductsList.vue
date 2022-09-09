@@ -47,7 +47,7 @@ watch(selectedProducts, (newValue) => {
 </script>
 
 <template>
-	<div class="h-full py-2 mt-2 -mx-2">
+	<div class="h-full w-full py-2 mt-2">
 		<div class="flex flex-col gap-1 overflow-y-auto overflow-x-hidden h-full">
 			<transition-group name="list">
 				<ProductsListItem

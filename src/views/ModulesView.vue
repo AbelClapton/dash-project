@@ -1,43 +1,43 @@
 <script setup>
 import { ref } from 'vue'
 import { onClickOutside } from '@vueuse/core'
-import { useCategoriesStore } from '@/data/categories.js'
+import { useModulesStore } from '@/data/modules.js'
 import { PencilIcon, TrashIcon, PlusIcon } from '@heroicons/vue/outline'
 import BaseInput from '@/components/base/BaseInput.vue'
 
-const categoriesStore = useCategoriesStore()
+const modulesStore = useModulesStore()
 
 const isModalOpen = ref(false)
-const isNewCategories = ref(false)
-const category = ref({
+const isNewModule = ref(false)
+const module = ref({
 	id: '',
 	name: '',
+	price: 0,
 })
 
 const modal = ref(null)
 
 const create = () => {
-	isNewCategories.value = true
+	isNewModule.value = true
 	isModalOpen.value = true
 }
 
 const edit = (id, name) => {
-	category.value.id = id
-	category.value.name = name
+	module.value.id = id
+	module.value.name = name
 	isModalOpen.value = true
 }
 
 const save = async () => {
-	if (isNewCategories.value)
-		await categoriesStore.save({ name: category.value.name })
-	else await categoriesStore.update(category.value)
+	if (isNewModule.value) await modulesStore.save({ name: module.value.name })
+	else await modulesStore.update(module.value)
 	reset()
 }
 
 const reset = () => {
-	category.value.id = ''
-	category.value.name = ''
-	isNewCategories.value = false
+	module.value.id = ''
+	module.value.name = ''
+	isNewModule.value = false
 	isModalOpen.value = false
 }
 
@@ -47,7 +47,7 @@ onClickOutside(modal, reset)
 <template>
 	<div class="h-full">
 		<div class="flex items-center justify-between">
-			<div class="text-lg font-semibold h-5">Categorías</div>
+			<div class="text-lg font-semibold h-5">Paquetes</div>
 			<button @click="create">
 				<PlusIcon class="h-7 w-7 p-1 rounded hover:bg-gray-600" />
 			</button>
@@ -58,15 +58,15 @@ onClickOutside(modal, reset)
 			<transition-group>
 				<div
 					class="flex justify-between items-center p-4 bg-slate-800 rounded"
-					v-for="category in categoriesStore.categories"
-					:key="category.id"
+					v-for="mod in modulesStore.modules"
+					:key="mod.id"
 				>
-					<span>{{ category.name }}</span>
+					<span>{{ mod.name }}</span>
 					<div class="flex justify-center items-center gap-2">
-						<button @click="edit(category.id, category.name)">
+						<button @click="edit(mod.id, mod.name)">
 							<PencilIcon class="h-5 w-5 text-gray-300" />
 						</button>
-						<button @click="categoriesStore.delete(category.id)">
+						<button @click="modulesStore.delete(mod.id)">
 							<TrashIcon class="h-5 w-5 text-red-500" />
 						</button>
 					</div>
@@ -82,12 +82,10 @@ onClickOutside(modal, reset)
 				<div class="relative bg-gray-800 p-10 rounded shadow-sm" ref="modal">
 					<div class="flex flex-col gap-2">
 						<div class="text-lg font-medium text-white">
-							{{ isNewCategories ? 'Nueva' : 'Editar' }} Categoría
+							{{ isNewModule ? 'Nuevo' : 'Editar' }} Paquete
 						</div>
-						<BaseInput
-							v-model="category.name"
-							placeholder="Nombre de la categoría"
-						/>
+						<BaseInput v-model="module.name" placeholder="Nombre del paquete" />
+						<BaseInput v-model="module.price" type="number" placeholder="0" />
 						<button
 							class="bg-cyan-500 text-lg font-medium text-white py-3 px-6 rounded-lg"
 							@click="save"

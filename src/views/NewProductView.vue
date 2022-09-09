@@ -13,11 +13,10 @@ const categoriesStore = useCategoriesStore()
 
 const product = ref({
 	name: '',
-	category: '',
+	category: -1,
 	price: 0,
-	brand: '',
+	brand: -1,
 	warningTreshold: 0,
-	alertTreshold: 0,
 })
 
 const route = useRoute()

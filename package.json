@@ -10,7 +10,7 @@
   },
   "dependencies": {
     "@headlessui/vue": "^1.6.7",
-    "@heroicons/vue": "^1.0.6",
+    "@heroicons/vue": "^2.0.10",
     "@supabase/supabase-js": "^1.35.4",
     "@vueuse/core": "^8.9.3",
     "interactjs": "^1.10.17",

@@ -1,15 +1,15 @@
 <script setup>
 import { ref } from 'vue'
 import { onClickOutside } from '@vueuse/core'
-import { useCategoriesStore } from '@/data/categories.js'
+import { useServicesStore } from '@/data/services.js'
 import { PencilIcon, TrashIcon, PlusIcon } from '@heroicons/vue/outline'
 import BaseInput from '@/components/base/BaseInput.vue'
 
-const categoriesStore = useCategoriesStore()
+const servicesStore = useServicesStore()
 
 const isModalOpen = ref(false)
-const isNewCategories = ref(false)
-const category = ref({
+const isNewService = ref(false)
+const service = ref({
 	id: '',
 	name: '',
 })
@@ -17,27 +17,26 @@ const category = ref({
 const modal = ref(null)
 
 const create = () => {
-	isNewCategories.value = true
+	isNewService.value = true
 	isModalOpen.value = true
 }
 
 const edit = (id, name) => {
-	category.value.id = id
-	category.value.name = name
+	service.value.id = id
+	service.value.name = name
 	isModalOpen.value = true
 }
 
 const save = async () => {
-	if (isNewCategories.value)
-		await categoriesStore.save({ name: category.value.name })
-	else await categoriesStore.update(category.value)
+	if (isNewService.value) await servicesStore.save({ name: service.value.name })
+	else await servicesStore.update(service.value)
 	reset()
 }
 
 const reset = () => {
-	category.value.id = ''
-	category.value.name = ''
-	isNewCategories.value = false
+	service.value.id = ''
+	service.value.name = ''
+	isNewService.value = false
 	isModalOpen.value = false
 }
 
@@ -47,7 +46,7 @@ onClickOutside(modal, reset)
 <template>
 	<div class="h-full">
 		<div class="flex items-center justify-between">
-			<div class="text-lg font-semibold h-5">Categorías</div>
+			<div class="text-lg font-semibold h-5">Servicios</div>
 			<button @click="create">
 				<PlusIcon class="h-7 w-7 p-1 rounded hover:bg-gray-600" />
 			</button>
@@ -58,15 +57,15 @@ onClickOutside(modal, reset)
 			<transition-group>
 				<div
 					class="flex justify-between items-center p-4 bg-slate-800 rounded"
-					v-for="category in categoriesStore.categories"
-					:key="category.id"
+					v-for="service in servicesStore.services"
+					:key="service.id"
 				>
-					<span>{{ category.name }}</span>
+					<span>{{ service.name }}</span>
 					<div class="flex justify-center items-center gap-2">
-						<button @click="edit(category.id, category.name)">
+						<button @click="edit(service.id, service.name)">
 							<PencilIcon class="h-5 w-5 text-gray-300" />
 						</button>
-						<button @click="categoriesStore.delete(category.id)">
+						<button @click="servicesStore.delete(service.id)">
 							<TrashIcon class="h-5 w-5 text-red-500" />
 						</button>
 					</div>
@@ -82,11 +81,11 @@ onClickOutside(modal, reset)
 				<div class="relative bg-gray-800 p-10 rounded shadow-sm" ref="modal">
 					<div class="flex flex-col gap-2">
 						<div class="text-lg font-medium text-white">
-							{{ isNewCategories ? 'Nueva' : 'Editar' }} Categoría
+							{{ isNewService ? 'Nuevo' : 'Editar' }} Servicio
 						</div>
 						<BaseInput
-							v-model="category.name"
-							placeholder="Nombre de la categoría"
+							v-model="service.name"
+							placeholder="Nombre del servicio"
 						/>
 						<button
 							class="bg-cyan-500 text-lg font-medium text-white py-3 px-6 rounded-lg"

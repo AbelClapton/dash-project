@@ -50,6 +50,41 @@ const router = createRouter({
 			component: () => import('../views/LoginView.vue'),
 		},
 		{
+			path: '/calendar',
+			name: 'calendar',
+			component: () => import('../views/CalendarView.vue'),
+		},
+		{
+			path: '/employees',
+			name: 'employees',
+			component: () => import('../views/EmployeesView.vue'),
+		},
+		{
+			path: '/employees/:id',
+			name: 'employee',
+			component: () => import('../views/EmployeeView.vue'),
+		},
+		{
+			path: '/employees/:id/edit',
+			name: 'new employee',
+			component: () => import('../views/NewEmployeeView.vue'),
+		},
+		{
+			path: '/add-employee',
+			name: 'new employee',
+			component: () => import('../views/NewEmployeeView.vue'),
+		},
+		{
+			path: '/services',
+			name: 'services',
+			component: () => import('../views/ServicesView.vue'),
+		},
+		{
+			path: '/modules',
+			name: 'modules',
+			component: () => import('../views/ModulesView.vue'),
+		},
+		{
 			path: '/404',
 			name: 'not_found',
 			component: () => import('../views/NotFound404View.vue'),

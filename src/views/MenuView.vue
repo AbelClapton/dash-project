@@ -1,8 +1,15 @@
 <script setup>
 import { ref, computed, onMounted, onUnmounted } from 'vue'
-import { CalendarIcon, TagIcon, ShoppingBagIcon } from '@heroicons/vue/outline'
-import BoxIcon from '@/components/icons/BoxIcon.vue'
-import DolarIcon from '@/components/icons/DolarIcon.vue'
+import {
+	CalendarDaysIcon,
+	TagIcon,
+	ShoppingBagIcon,
+	UserGroupIcon,
+	BanknotesIcon,
+	ArchiveIcon,
+	TicketIcon,
+	RectangleStacksIcon,
+} from '@heroicons/vue/outline'
 import interact from 'interactjs'
 
 // eslint-disable-next-line no-unused-vars
@@ -69,7 +76,7 @@ function resetMenuPosition() {
 							class="flex items-center gap-4 hover:bg-slate-600 px-6 py-3"
 							@click="$emit('close')"
 						>
-							<BoxIcon class="h-5 w-5" />
+							<ArchiveIcon class="h-5 w-5" />
 							<span>Inventario</span>
 						</router-link>
 						<router-link
@@ -93,7 +100,7 @@ function resetMenuPosition() {
 							class="flex items-center gap-4 hover:bg-slate-600 px-6 py-3"
 							@click="$emit('close')"
 						>
-							<DolarIcon class="h-5 w-5" />
+							<BanknotesIcon class="h-5 w-5" />
 							<span>Finanzas</span>
 						</router-link>
 						<router-link
@@ -101,8 +108,32 @@ function resetMenuPosition() {
 							class="flex items-center gap-4 hover:bg-slate-600 px-6 py-3"
 							@click="$emit('close')"
 						>
-							<CalendarIcon class="h-5 w-5" />
-							<span>Calendario</span>
+							<CalendarDaysIcon class="h-5 w-5" />
+							<span>Reservaciones</span>
+						</router-link>
+						<router-link
+							to="employees"
+							class="flex items-center gap-4 hover:bg-slate-600 px-6 py-3"
+							@click="$emit('close')"
+						>
+							<UserGroupIcon class="h-5 w-5" />
+							<span>Empleados</span>
+						</router-link>
+						<router-link
+							to="services"
+							class="flex items-center gap-4 hover:bg-slate-600 px-6 py-3"
+							@click="$emit('close')"
+						>
+							<TicketIcon class="h-5 w-5" />
+							<span>Servicios</span>
+						</router-link>
+						<router-link
+							to="modules"
+							class="flex items-center gap-4 hover:bg-slate-600 px-6 py-3"
+							@click="$emit('close')"
+						>
+							<RectangleStacksIcon class="h-5 w-5" />
+							<span>Paquetes</span>
 						</router-link>
 					</div>
 				</div>
@@ -111,8 +142,12 @@ function resetMenuPosition() {
 	</div>
 </template>
 
-<style>
+<style scoped>
 .router-link-active {
 	@apply bg-slate-600;
+}
+
+span {
+	@apply font-light;
 }
 </style>
