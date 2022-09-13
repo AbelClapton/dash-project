@@ -1,6 +1,6 @@
 <script setup>
 import { ref, watch } from 'vue'
-import { TrashIcon, ChevronLeftIcon } from '@heroicons/vue/outline'
+import { TrashIcon, ChevronLeftIcon } from '@heroicons/vue/24/outline'
 import ProductsListItem from '@/components/ProductsListItem.vue'
 
 const props = defineProps({
@@ -47,7 +47,7 @@ watch(selectedProducts, (newValue) => {
 </script>
 
 <template>
-	<div class="h-full w-full py-2 mt-2">
+	<div class="h-full w-full py-2 mt-4">
 		<div class="flex flex-col gap-1 overflow-y-auto overflow-x-hidden h-full">
 			<transition-group name="list">
 				<ProductsListItem
@@ -61,17 +61,18 @@ watch(selectedProducts, (newValue) => {
 				/>
 			</transition-group>
 		</div>
-	</div>
-	<transition name="slide">
-		<div
-			class="absolute -bottom-1 flex -pt-1 items-center justify-between left-0 z-10 w-full h-16 bg-gray-700 px-4"
-			v-if="isSelecting"
-		>
-			<ChevronLeftIcon class="h-5 w-5 text-gray-400" @click="selectOff" />
-			<div class="text-gray-400">
-				{{ selectedProducts.length || 0 }} seleccionados
+
+		<transition name="slide">
+			<div
+				class="absolute -bottom-1 flex -pt-1 items-center justify-between left-0 z-10 w-full h-16 bg-gray-700 px-4"
+				v-if="isSelecting"
+			>
+				<ChevronLeftIcon class="h-5 w-5 text-gray-400" @click="selectOff" />
+				<div class="text-gray-400">
+					{{ selectedProducts.length || 0 }} seleccionados
+				</div>
+				<TrashIcon class="h-5 w-5 text-red-400" @click="deleteSelected" />
 			</div>
-			<TrashIcon class="h-5 w-5 text-red-400" @click="deleteSelected" />
-		</div>
-	</transition>
+		</transition>
+	</div>
 </template>

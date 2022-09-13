@@ -1,9 +1,10 @@
 <script setup>
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
 import { onClickOutside } from '@vueuse/core'
 import { useCategoriesStore } from '@/data/categories.js'
-import { PencilIcon, TrashIcon, PlusIcon } from '@heroicons/vue/outline'
+import { PencilIcon, TrashIcon, PlusIcon } from '@heroicons/vue/24/outline'
 import BaseInput from '@/components/base/BaseInput.vue'
+import BaseSpinner from '@/components/BaseSpinner.vue'
 
 const categoriesStore = useCategoriesStore()
 
@@ -27,6 +28,14 @@ const edit = (id, name) => {
 	isModalOpen.value = true
 }
 
+const refresh = () => {
+	categoriesStore.fetchAll()
+}
+
+const remove = async (id) => {
+	await categoriesStore.remove(id)
+}
+
 const save = async () => {
 	if (isNewCategories.value)
 		await categoriesStore.save({ name: category.value.name })
@@ -42,20 +51,32 @@ const reset = () => {
 }
 
 onClickOutside(modal, reset)
+
+onMounted(async () => {
+	if (!categoriesStore.categories.length) refresh()
+})
 </script>
 
 <template>
-	<div class="h-full">
+	<div class="h-full pb-24">
 		<div class="flex items-center justify-between">
 			<div class="text-lg font-semibold h-5">Categorías</div>
 			<button @click="create">
 				<PlusIcon class="h-7 w-7 p-1 rounded hover:bg-gray-600" />
 			</button>
 		</div>
-		<div
-			class="flex flex-col gap-1 overflow-y-auto overflow-x-hidden h-full py-2 mt-2 -mx-2"
-		>
-			<transition-group>
+		<div class="h-full w-full flex items-center justify-center pt-4">
+			<div
+				class="loader absolute top-1/4 left-1/2"
+				v-if="categoriesStore.loading"
+			>
+				<BaseSpinner class="h-10 w-10 text-cyan-500" />
+			</div>
+			<div
+				class="flex flex-col gap-1 overflow-y-auto overflow-x-hidden h-full my-2-2 -mx-2"
+				v-auto-animate
+				v-else-if="categoriesStore.brands.length"
+			>
 				<div
 					class="flex justify-between items-center p-4 bg-slate-800 rounded"
 					v-for="category in categoriesStore.categories"
@@ -66,12 +87,13 @@ onClickOutside(modal, reset)
 						<button @click="edit(category.id, category.name)">
 							<PencilIcon class="h-5 w-5 text-gray-300" />
 						</button>
-						<button @click="categoriesStore.delete(category.id)">
+						<button @click="remove(category.id)">
 							<TrashIcon class="h-5 w-5 text-red-500" />
 						</button>
 					</div>
 				</div>
-			</transition-group>
+			</div>
+			<div v-else class="text-gray-500">No existen categorías registradas.</div>
 		</div>
 
 		<Teleport to="#modal">

@@ -1,5 +1,5 @@
 <script setup>
-import { DotsVerticalIcon, PlusIcon } from '@heroicons/vue/outline'
+import { EllipsisVerticalIcon, PlusIcon } from '@heroicons/vue/24/outline'
 </script>
 
 <template>
@@ -11,7 +11,7 @@ import { DotsVerticalIcon, PlusIcon } from '@heroicons/vue/outline'
 					<PlusIcon class="h-7 w-7 p-1 rounded hover:bg-gray-600" />
 				</button>
 				<button @click="create">
-					<DotsVerticalIcon class="h-7 w-7 p-1 rounded hover:bg-gray-600" />
+					<EllipsisVerticalIcon class="h-7 w-7 p-1 rounded hover:bg-gray-600" />
 				</button>
 			</div>
 		</div>

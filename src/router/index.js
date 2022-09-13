@@ -66,7 +66,7 @@ const router = createRouter({
 		},
 		{
 			path: '/employees/:id/edit',
-			name: 'new employee',
+			name: 'edit employee',
 			component: () => import('../views/NewEmployeeView.vue'),
 		},
 		{
@@ -78,6 +78,11 @@ const router = createRouter({
 			path: '/services',
 			name: 'services',
 			component: () => import('../views/ServicesView.vue'),
+		},
+		{
+			path: '/services/:id',
+			name: 'service-details',
+			component: () => import('../views/ServiceView.vue'),
 		},
 		{
 			path: '/modules',

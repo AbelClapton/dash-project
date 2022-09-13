@@ -24,17 +24,21 @@ export const useEmployeesStore = defineStore({
 				},
 			])
 			if (error) return error
-			console.log(data)
+			employee.id = data[0].id
 			employee.services.forEach(async (service) => {
-				error = await supabase.from('employees_services').insert([
+				let { error } = await supabase.from('employees_services').insert([
 					{
-						employee: data.id,
+						employee: employee.id,
 						service: service,
 					},
 				])
+				if (error) console.log(error)
 			})
-			if (error) return error
-			this.employees = this.employees.push(employee)
+			if (error) {
+				console.log(error)
+				return error
+			}
+			this.employees.push(employee)
 		},
 		async update(employee) {
 			let { error } = await supabase
@@ -64,11 +68,8 @@ export const useEmployeesStore = defineStore({
 				])
 			})
 			if (error) return error
-			this.employees = this.employees.splice(
-				this.employees.findIndex((e) => e.id == employee.id),
-				1,
+			this.employees[this.employees.findIndex((e) => e.id == employee.id)] =
 				employee
-			)
 		},
 		async delete(id) {
 			const { error } = await supabase.from('employees').delete().eq('id', id)

@@ -1,76 +1,63 @@
 <script setup>
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
 import { onClickOutside } from '@vueuse/core'
 import { useServicesStore } from '@/data/services.js'
-import { PencilIcon, TrashIcon, PlusIcon } from '@heroicons/vue/outline'
+import { PlusIcon } from '@heroicons/vue/24/outline'
 import BaseInput from '@/components/base/BaseInput.vue'
 
 const servicesStore = useServicesStore()
 
 const isModalOpen = ref(false)
-const isNewService = ref(false)
 const service = ref({
-	id: '',
 	name: '',
 })
 
 const modal = ref(null)
 
 const create = () => {
-	isNewService.value = true
-	isModalOpen.value = true
-}
-
-const edit = (id, name) => {
-	service.value.id = id
-	service.value.name = name
 	isModalOpen.value = true
 }
 
 const save = async () => {
-	if (isNewService.value) await servicesStore.save({ name: service.value.name })
-	else await servicesStore.update(service.value)
+	await servicesStore.save({ name: service.value.name })
 	reset()
 }
 
 const reset = () => {
-	service.value.id = ''
 	service.value.name = ''
-	isNewService.value = false
 	isModalOpen.value = false
 }
 
 onClickOutside(modal, reset)
+
+onMounted(() => {
+	servicesStore.fetchAll()
+})
 </script>
 
 <template>
-	<div class="h-full">
-		<div class="flex items-center justify-between">
+	<div class="h-full w-full pb-24">
+		<div class="flex items-center justify-between mb-4">
 			<div class="text-lg font-semibold h-5">Servicios</div>
 			<button @click="create">
 				<PlusIcon class="h-7 w-7 p-1 rounded hover:bg-gray-600" />
 			</button>
 		</div>
-		<div
-			class="flex flex-col gap-1 overflow-y-auto overflow-x-hidden h-full py-2 mt-2 -mx-2"
-		>
-			<transition-group>
-				<div
-					class="flex justify-between items-center p-4 bg-slate-800 rounded"
-					v-for="service in servicesStore.services"
-					:key="service.id"
-				>
-					<span>{{ service.name }}</span>
-					<div class="flex justify-center items-center gap-2">
-						<button @click="edit(service.id, service.name)">
-							<PencilIcon class="h-5 w-5 text-gray-300" />
-						</button>
-						<button @click="servicesStore.delete(service.id)">
-							<TrashIcon class="h-5 w-5 text-red-500" />
-						</button>
+		<div class="flex justify-between items-center h-full">
+			<div
+				class="flex flex-col gap-1 overflow-y-auto overflow-x-hidden h-full w-screen my-2"
+			>
+				<transition-group name="list">
+					<div
+						class="flex justify-between items-center p-4 bg-slate-800 rounded"
+						v-for="service in servicesStore.services"
+						:key="service.id"
+						@click="$router.push({ path: `/services/${service.id}` })"
+					>
+						<span>{{ service.name }}</span>
 					</div>
-				</div>
-			</transition-group>
+				</transition-group>
+			</div>
 		</div>
 
 		<Teleport to="#modal">
@@ -80,9 +67,7 @@ onClickOutside(modal, reset)
 			>
 				<div class="relative bg-gray-800 p-10 rounded shadow-sm" ref="modal">
 					<div class="flex flex-col gap-2">
-						<div class="text-lg font-medium text-white">
-							{{ isNewService ? 'Nuevo' : 'Editar' }} Servicio
-						</div>
+						<div class="text-lg font-medium text-white">Nuevo Servicio</div>
 						<BaseInput
 							v-model="service.name"
 							placeholder="Nombre del servicio"

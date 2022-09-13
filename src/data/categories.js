@@ -1,76 +1,63 @@
 import { defineStore } from 'pinia'
 import useClient from '@/libraries/supabase.js'
+import useRaiseToast from '@/composables/useRaiseToast.js'
 
 const supabase = useClient()
+const { success, error } = useRaiseToast()
 
 export const useCategoriesStore = defineStore({
 	id: 'categories',
 	state: () => ({
 		categories: [],
-		error: null,
 		loading: false,
-		subscription: null,
 	}),
 	actions: {
-		async init() {
+		async fetchAll() {
 			this.loading = true
-			// Fetch data
-			const { data, error } = await supabase.from('categories').select('*')
-
-			this.categories = data
-			this.error = error
-
-			// Subscribe to changes
-			this.subscription = supabase
+			let { data: categories, error: err } = await supabase
 				.from('categories')
-				.on('INSERT', (payload) => {
-					this.categories.push(payload.new)
-				})
-				.on('UPDATE', (payload) => {
-					this.categories.splice(
-						this.categories.findIndex((p) => p.id === payload.new.id),
-						1,
-						payload.new
-					)
-				})
-				.on('DELETE', (payload) => {
-					this.categories.splice(
-						this.categories.findIndex((p) => p.id === payload.old.id),
-						1
-					)
-				})
-				.subscribe()
-
+				.select('*')
+			if (err) error(err)
+			else this.categories = categories
 			this.loading = false
 		},
-		unsubscribe() {
-			supabase.removeSubscription(this.subscription)
-		},
+
 		async save(category) {
 			this.loading = true
-			const { error } = await supabase.from('categories').insert([category])
-			this.error = error
+			const { data, error: err } = await supabase
+				.from('categories')
+				.insert([category])
+			if (err) error(err)
+			else {
+				this.categories.push(data[0])
+				success('Categoría registrada')
+			}
 			this.loading = false
 		},
+
 		async update(category) {
+			this.loading = true
 			const { error } = await supabase
 				.from('categories')
 				.update(category)
-				.match({ id: category.id })
-			this.error = error
-		},
-		async delete(id) {
-			this.loading = true
-			this.error = await supabase.from('categories').delete().match({ id })
+				.eq('id', category.id)
+
+			if (!error) {
+				const index = this.categories.findIndex((e) => e.id == category.id)
+				this.categories[index].name = category.name
+			}
 			this.loading = false
 		},
-		async deleteMultiple(ids = []) {
-			ids.forEach(async (id) => {
-				await this.delete(id)
-			})
+
+		async remove(id) {
+			this.loading = true
+			const { err } = await supabase.from('categories').delete().eq('id', id)
+			if (err) error(err)
+			else this.categories = this.categories.filter((e) => e.id != id)
+			this.loading = false
 		},
 	},
 	getters: {
-		get: (state) => (id) => state.categories.find((p) => p.id == id).name,
+		get: (state) => (id) => state.categories.find((e) => e.id == id),
 	},
 })

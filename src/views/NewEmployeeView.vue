@@ -26,6 +26,7 @@ const save = async () => {
 
 onMounted(() => {
 	if (!servicesStore.services.length) servicesStore.fetchAll()
+	if (!employeesStore.employees.length) employeesStore.fetchAll()
 	if (route.params.id) employee.value = employeesStore.get(route.params.id)
 })
 </script>
@@ -48,7 +49,7 @@ onMounted(() => {
 					v-model="employee.name"
 				/>
 				<BaseInput
-					label="phone"
+					label="Teléfono"
 					type="text"
 					placeholder="Teléfono"
 					v-model="employee.phone"
@@ -57,7 +58,7 @@ onMounted(() => {
 					label="Servicios"
 					:options="servicesStore.services"
 					v-model="employee.services"
-					multiple="true"
+					multiple
 					placeholder="Seleccionar servicios"
 				/>
 			</div>

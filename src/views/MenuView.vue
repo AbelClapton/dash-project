@@ -6,10 +6,10 @@ import {
 	ShoppingBagIcon,
 	UserGroupIcon,
 	BanknotesIcon,
-	ArchiveIcon,
+	ArchiveBoxIcon,
 	TicketIcon,
-	RectangleStacksIcon,
-} from '@heroicons/vue/outline'
+	RectangleStackIcon,
+} from '@heroicons/vue/24/outline'
 import interact from 'interactjs'
 
 // eslint-disable-next-line no-unused-vars
@@ -76,7 +76,7 @@ function resetMenuPosition() {
 							class="flex items-center gap-4 hover:bg-slate-600 px-6 py-3"
 							@click="$emit('close')"
 						>
-							<ArchiveIcon class="h-5 w-5" />
+							<ArchiveBoxIcon class="h-5 w-5" />
 							<span>Inventario</span>
 						</router-link>
 						<router-link
@@ -104,7 +104,7 @@ function resetMenuPosition() {
 							<span>Finanzas</span>
 						</router-link>
 						<router-link
-							to="calendar"
+							to="/calendar"
 							class="flex items-center gap-4 hover:bg-slate-600 px-6 py-3"
 							@click="$emit('close')"
 						>
@@ -112,7 +112,7 @@ function resetMenuPosition() {
 							<span>Reservaciones</span>
 						</router-link>
 						<router-link
-							to="employees"
+							to="/employees"
 							class="flex items-center gap-4 hover:bg-slate-600 px-6 py-3"
 							@click="$emit('close')"
 						>
@@ -120,7 +120,7 @@ function resetMenuPosition() {
 							<span>Empleados</span>
 						</router-link>
 						<router-link
-							to="services"
+							to="/services"
 							class="flex items-center gap-4 hover:bg-slate-600 px-6 py-3"
 							@click="$emit('close')"
 						>
@@ -128,11 +128,11 @@ function resetMenuPosition() {
 							<span>Servicios</span>
 						</router-link>
 						<router-link
-							to="modules"
+							to="/modules"
 							class="flex items-center gap-4 hover:bg-slate-600 px-6 py-3"
 							@click="$emit('close')"
 						>
-							<RectangleStacksIcon class="h-5 w-5" />
+							<RectangleStackIcon class="h-5 w-5" />
 							<span>Paquetes</span>
 						</router-link>
 					</div>

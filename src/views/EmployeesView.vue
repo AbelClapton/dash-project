@@ -1,7 +1,11 @@
 <script setup>
 import { onMounted } from 'vue'
 import { useEmployeesStore } from '@/data/employees.js'
-import { PlusIcon, DotsVerticalIcon, PhoneIcon } from '@heroicons/vue/outline'
+import {
+	PlusIcon,
+	EllipsisVerticalIcon,
+	PhoneIcon,
+} from '@heroicons/vue/24/outline'
 
 const employeesStore = useEmployeesStore()
 
@@ -18,7 +22,7 @@ onMounted(() => {
 				<router-link to="/add-employee">
 					<PlusIcon class="h-7 w-7 p-1 rounded hover:bg-gray-600" />
 				</router-link>
-				<DotsVerticalIcon class="h-7 w-7 p-1 rounded hover:bg-gray-600" />
+				<EllipsisVerticalIcon class="h-7 w-7 p-1 rounded hover:bg-gray-600" />
 			</div>
 		</div>
 		<div class="flex items-center justify-center h-full">

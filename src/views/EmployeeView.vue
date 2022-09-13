@@ -4,7 +4,11 @@ import { useRoute } from 'vue-router'
 import { useRouter } from 'vue-router'
 import { onClickOutside } from '@vueuse/core'
 import { useEmployeesStore } from '@/data/employees.js'
-import { DotsVerticalIcon, PencilIcon, TrashIcon } from '@heroicons/vue/outline'
+import {
+	EllipsisVerticalIcon,
+	PencilIcon,
+	TrashIcon,
+} from '@heroicons/vue/24/outline'
 
 const employeesStore = useEmployeesStore()
 const route = useRoute()
@@ -16,7 +20,7 @@ const optionsMenu = ref(null)
 onClickOutside(optionsMenu, () => (isOptionsVisible.value = false))
 
 const edit = () => {
-	router.push({ path: `/products/${employee.id}/edit` })
+	router.push({ path: `/employees/${employee.id}/edit` })
 }
 
 const remove = () => {
@@ -32,7 +36,7 @@ const remove = () => {
 		</div>
 		<div class="flex items-center gap-2">
 			<div class="relative">
-				<DotsVerticalIcon
+				<EllipsisVerticalIcon
 					class="h-7 w-7 p-1 rounded hover:bg-gray-600"
 					@click="isOptionsVisible = true"
 				/>

@@ -3,12 +3,12 @@ import { ref, computed, nextTick } from 'vue'
 import { onClickOutside } from '@vueuse/core'
 import { useProductsStore } from '@/data/products.js'
 import {
-	DotsVerticalIcon,
-	SortAscendingIcon,
-	SearchIcon,
+	EllipsisVerticalIcon,
+	BarsArrowDownIcon,
+	MagnifyingGlassIcon,
 	PlusIcon,
-	XIcon,
-} from '@heroicons/vue/outline'
+	XMarkIcon,
+} from '@heroicons/vue/24/outline'
 import ProductsList from '@/components/ProductsList.vue'
 import BaseSpinner from '@/components/BaseSpinner.vue'
 import FilterIcon from '@/components/icons/FilterIcon.vue'
@@ -62,19 +62,19 @@ const onSearchInput = (event) => {
 </script>
 
 <template>
-	<div class="h-full pb-20">
+	<div class="h-full pb-24">
 		<div class="flex items-center justify-between">
 			<div class="text-lg font-semibold h-5">Inventario</div>
 			<div class="flex items-center gap-2">
 				<router-link to="/products/add">
 					<PlusIcon class="h-7 w-7 p-1 rounded hover:bg-gray-600" />
 				</router-link>
-				<SearchIcon
+				<MagnifyingGlassIcon
 					class="h-7 w-7 p-1 rounded hover:bg-gray-600"
 					@click="showSearch"
 				/>
 				<div class="">
-					<DotsVerticalIcon
+					<EllipsisVerticalIcon
 						class="h-7 w-7 p-1 rounded hover:bg-gray-600"
 						@click="isOptionsVisible = true"
 					/>
@@ -87,7 +87,7 @@ const onSearchInput = (event) => {
 							class="w-full flex items-center gap-3 px-5 py-2.5"
 							@click="sort"
 						>
-							<SortAscendingIcon class="h-5 w-5" />
+							<BarsArrowDownIcon class="h-5 w-5" />
 							<div>Ordenar</div>
 						</button>
 						<button
@@ -127,7 +127,7 @@ const onSearchInput = (event) => {
 			v-show="isSearchVisible"
 			ref="searchDiv"
 		>
-			<SearchIcon class="h-7 w-7 p-1 rounded text-gray-400" />
+			<MagnifyingGlassIcon class="h-7 w-7 p-1 rounded text-gray-400" />
 			<input
 				class="bg-gray-800 border-0 outline-0 h-full flex-grow pl-3"
 				type="text"
@@ -135,7 +135,7 @@ const onSearchInput = (event) => {
 				placeholder="Buscar por nombre"
 				@input="onSearchInput($event)"
 			/>
-			<XIcon
+			<XMarkIcon
 				class="h-7 w-7 p-1 rounded text-gray-400"
 				@click="isSearchVisible = false"
 			/>

@@ -6,7 +6,7 @@ import {
 	ListboxOptions,
 	ListboxOption,
 } from '@headlessui/vue'
-import { CheckIcon, SelectorIcon } from '@heroicons/vue/solid'
+import { CheckIcon, ChevronUpDownIcon } from '@heroicons/vue/24/outline'
 
 const props = defineProps({
 	options: {
@@ -67,7 +67,10 @@ const label = computed(() => {
 					<span
 						class="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2"
 					>
-						<SelectorIcon class="h-5 w-5 text-gray-400" aria-hidden="true" />
+						<ChevronUpDownIcon
+							class="h-5 w-5 text-gray-400"
+							aria-hidden="true"
+						/>
 					</span>
 				</ListboxButton>
 				<transition
