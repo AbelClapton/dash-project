@@ -1,76 +1,57 @@
 import { defineStore } from 'pinia'
 import useClient from '@/libraries/supabase.js'
-
 const supabase = useClient()
 
 export const useProductsStore = defineStore({
 	id: 'products',
 	state: () => ({
 		products: [],
-		error: null,
 		loading: false,
-		subscription: null,
 	}),
 	actions: {
-		async init() {
+		async fetchAll() {
 			this.loading = true
-			// Fetch data
-			const { data, error } = await supabase.from('products').select('*')
-
-			this.products = data
-			this.error = error
-
-			// Subscribe to changes
-			this.subscription = supabase
+			let { data: products, error: err } = await supabase
 				.from('products')
-				.on('INSERT', (payload) => {
-					this.products.push(payload.new)
-				})
-				.on('UPDATE', (payload) => {
-					this.products.splice(
-						this.products.findIndex((p) => p.id === payload.old.id),
-						1,
-						payload.new
-					)
-				})
-				.on('DELETE', (payload) => {
-					this.products.splice(
-						this.products.findIndex((p) => p.id === payload.old.id),
-						1
-					)
-				})
-				.subscribe()
-
+				.select('*')
+			if (!err) this.products = products
 			this.loading = false
 		},
-		unsubscribe() {
-			supabase.removeSubscription(this.subscription)
-		},
+
 		async save(product) {
 			this.loading = true
-			const { error } = await supabase.from('products').insert([product])
-			this.error = error
+			const { data, error: err } = await supabase
+				.from('products')
+				.insert([product])
+			if (!err) this.products.push(data[0])
 			this.loading = false
 		},
+
 		async update(product) {
+			this.loading = true
 			const { error } = await supabase
 				.from('products')
 				.update(product)
-				.match({ id: product.id })
-			this.error = error
-		},
-		async delete(id) {
-			this.loading = true
-			this.error = await supabase.from('products').delete().match({ id })
+				.eq('id', product.id)
+
+			if (!error) {
+				const index = this.products.findIndex((e) => e.id == product.id)
+				this.products[index].name = product.name
+			}
 			this.loading = false
 		},
-		async deleteMultiple(ids = []) {
-			ids.forEach(async (id) => {
-				await this.delete(id)
-			})
+
+		async remove(id) {
+			this.loading = true
+			const { error: err } = await supabase
+				.from('products')
+				.delete()
+				.eq('id', id)
+			if (!err) this.products = this.products.filter((e) => e.id != id)
+			this.loading = false
 		},
 	},
 	getters: {
-		get: (state) => (id) => state.products.find((p) => p.id == id),
+		get: (state) => (id) => state.products.find((e) => e.id == id),
 	},
 })

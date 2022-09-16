@@ -1,9 +1,7 @@
 import { defineStore } from 'pinia'
 import useClient from '@/libraries/supabase.js'
-import useRaiseToast from '@/composables/useRaiseToast.js'
 
 const supabase = useClient()
-const { success, error } = useRaiseToast()
 
 export const useCategoriesStore = defineStore({
 	id: 'categories',
@@ -17,8 +15,7 @@ export const useCategoriesStore = defineStore({
 			let { data: categories, error: err } = await supabase
 				.from('categories')
 				.select('*')
-			if (err) error(err)
-			else this.categories = categories
+			if (!err) this.categories = categories
 			this.loading = false
 		},
 
@@ -27,11 +24,7 @@ export const useCategoriesStore = defineStore({
 			const { data, error: err } = await supabase
 				.from('categories')
 				.insert([category])
-			if (err) error(err)
-			else {
-				this.categories.push(data[0])
-				success('Categoría registrada')
-			}
+			if (!err) this.categories.push(data[0])
 			this.loading = false
 		},
 
@@ -51,9 +44,11 @@ export const useCategoriesStore = defineStore({
 
 		async remove(id) {
 			this.loading = true
-			const { err } = await supabase.from('categories').delete().eq('id', id)
-			if (err) error(err)
-			else this.categories = this.categories.filter((e) => e.id != id)
+			const { error: err } = await supabase
+				.from('categories')
+				.delete()
+				.eq('id', id)
+			if (!err) this.categories = this.categories.filter((e) => e.id != id)
 			this.loading = false
 		},
 	},
