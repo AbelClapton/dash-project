@@ -1,9 +1,7 @@
 import { defineStore } from 'pinia'
 import useClient from '@/libraries/supabase.js'
-import useRaiseToast from '@/composables/useRaiseToast.js'
 
 const supabase = useClient()
-const { success, error } = useRaiseToast()
 
 export const useBrandsStore = defineStore({
 	id: 'brands',
@@ -17,19 +15,15 @@ export const useBrandsStore = defineStore({
 			let { data: brands, error: err } = await supabase
 				.from('brands')
 				.select('*')
-			if (err) error(err)
-			else this.brands = brands
+			if (!err) this.brands = brands
 			this.loading = false
 		},
 
 		async save(brand) {
 			this.loading = true
 			const { data, error: err } = await supabase.from('brands').insert([brand])
-			if (err) error(err)
-			else {
-				this.brands.push(data[0])
-				success('Marca registrada')
-			}
+			if (!err) this.brands.push(data[0])
+
 			this.loading = false
 		},
 
@@ -50,8 +44,7 @@ export const useBrandsStore = defineStore({
 		async remove(id) {
 			this.loading = true
 			const { err } = await supabase.from('brands').delete().eq('id', id)
-			if (err) error(err)
-			else this.brands = this.brands.filter((e) => e.id != id)
+			if (!err) this.brands = this.brands.filter((e) => e.id != id)
 			this.loading = false
 		},
 	},

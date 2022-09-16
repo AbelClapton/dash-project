@@ -13,10 +13,10 @@
     "@headlessui/vue": "^1.6.7",
     "@heroicons/vue": "^2.0.10",
     "@supabase/supabase-js": "^1.35.4",
+    "@vueuse/components": "^9.2.0",
     "@vueuse/core": "^8.9.3",
     "interactjs": "^1.10.17",
     "pinia": "^2.0.14",
-    "pinia-plugin-persistedstate": "^1.6.3",
     "vue": "^3.2.37",
     "vue-router": "^4.1.2",
     "vue3-touch-events": "^4.1.0"

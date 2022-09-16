@@ -1,8 +1,8 @@
 import { useToastsStore } from '@/data/toasts.js'
 
-const toastsStore = useToastsStore()
-
 export default function useRaiseToast() {
+	const toastsStore = useToastsStore()
+
 	const success = (message, title = 'Operación exitosa') => {
 		toastsStore.addToast({
 			title,
