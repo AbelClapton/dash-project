@@ -3,8 +3,8 @@ import { ref, onMounted, computed } from 'vue'
 import { useRoute } from 'vue-router'
 import { useRouter } from 'vue-router'
 import { onClickOutside } from '@vueuse/core'
-import { useServicesStore } from '@/data/services.js'
-import { useModulesStore } from '@/data/modules.js'
+import { useServicesStore } from '@/stores/services.js'
+import { useModulesStore } from '@/stores/modules.js'
 import {
 	EllipsisVerticalIcon,
 	PencilIcon,

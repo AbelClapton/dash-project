@@ -4,8 +4,8 @@ import { useRouter } from 'vue-router'
 import { TagIcon } from '@heroicons/vue/24/outline'
 import DolarIcon from '@/components/icons/DolarIcon.vue'
 import BoxIcon from '@/components/icons/BoxIcon.vue'
-import { useBrandsStore } from '@/data/brands.js'
-import { useCategoriesStore } from '@/data/categories.js'
+import { useBrandsStore } from '@/stores/brands.js'
+import { useCategoriesStore } from '@/stores/categories.js'
 
 const props = defineProps({
 	product: Object,

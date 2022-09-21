@@ -1,6 +1,6 @@
 <script setup>
 import { onMounted } from 'vue'
-// import { useProductsStore } from '@/data/products.js'
+// import { useProductsStore } from '@/stores/products.js'
 import ProductsTable from '@/components/ProductsTable.vue'
 import useQuery from '@/hooks/sb-hooks-select'
 

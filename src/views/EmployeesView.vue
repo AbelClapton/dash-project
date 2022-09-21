@@ -1,6 +1,6 @@
 <script setup>
 import { onMounted } from 'vue'
-import { useEmployeesStore } from '@/data/employees.js'
+import { useEmployeesStore } from '@/stores/employees.js'
 import {
 	PlusIcon,
 	EllipsisVerticalIcon,

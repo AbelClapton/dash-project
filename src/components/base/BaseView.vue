@@ -12,16 +12,6 @@ defineProps({
 			return []
 		},
 	},
-	altActions: {
-		type: Array,
-		default() {
-			return []
-		},
-	},
-	alt: {
-		type: Boolean,
-		default: false,
-	},
 })
 </script>
 
@@ -30,10 +20,7 @@ defineProps({
 		<!-- View Header -->
 		<div class="flex items-center justify-between">
 			<div class="text-lg font-semibold h-5">{{ title }}</div>
-			<transition name="fade" mode="out-in">
-				<ViewActions v-if="!alt" :actions="actions" />
-				<ViewActions v-else :actions="altActions" />
-			</transition>
+			<ViewActions :actions="actions" />
 		</div>
 		<!-- End of View Header -->
 

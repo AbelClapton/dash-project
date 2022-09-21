@@ -1,9 +1,9 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import { useProductsStore } from '@/data/products.js'
-import { useBrandsStore } from '@/data/brands.js'
-import { useCategoriesStore } from '@/data/categories.js'
+import { useProductsStore } from '@/stores/products.js'
+import { useBrandsStore } from '@/stores/brands.js'
+import { useCategoriesStore } from '@/stores/categories.js'
 import BaseInput from '@/components/base/BaseInput.vue'
 import BaseListBox from '@/components/base/BaseListBox.vue'
 

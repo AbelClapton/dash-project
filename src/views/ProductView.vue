@@ -3,7 +3,7 @@ import { ref } from 'vue'
 import { useRoute } from 'vue-router'
 import { useRouter } from 'vue-router'
 import { onClickOutside } from '@vueuse/core'
-import { useProductsStore } from '@/data/products.js'
+import { useProductsStore } from '@/stores/products.js'
 import {
 	EllipsisVerticalIcon,
 	PencilIcon,

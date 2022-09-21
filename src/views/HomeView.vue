@@ -2,7 +2,7 @@
 import { ref, onMounted } from 'vue'
 import BaseView from '@/components/base/BaseView.vue'
 import ViewList from '@/components/ViewList.vue'
-import { useBrandsStore } from '@/data/brands.js'
+import { useBrandsStore } from '@/stores/brands.js'
 import { useRouter } from 'vue-router'
 import {
 	PlusIcon,

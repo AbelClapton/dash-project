@@ -1,7 +1,7 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 import { onClickOutside } from '@vueuse/core'
-import { useBrandsStore } from '@/data/brands.js'
+import { useBrandsStore } from '@/stores/brands.js'
 import {
 	PencilIcon,
 	TrashIcon,

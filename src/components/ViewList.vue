@@ -2,6 +2,7 @@
 import { ref, watch } from 'vue'
 import BaseSpinner from '@/components/BaseSpinner.vue'
 import ViewListItem from '@/components/ViewListItem.vue'
+import { TrashIcon, ChevronLeftIcon } from '@heroicons/vue/24/outline'
 
 defineProps({
 	items: {
@@ -16,17 +17,19 @@ defineProps({
 	},
 	action: Function,
 })
+const emit = defineEmits(['delete'])
 
-const isSelecting = ref(false)
+const isSelectModeOn = ref(false)
+const isSearchModeOn = ref(false)
 const selectedItems = ref([])
 
 function selectOn(id) {
-	isSelecting.value = true
+	isSelectModeOn.value = true
 	selectedItems.value.push(id)
 }
 
 function selectOff() {
-	isSelecting.value = false
+	isSelectModeOn.value = false
 	selectedItems.value = []
 }
 
@@ -36,6 +39,12 @@ function select(id) {
 
 function unselect(id) {
 	selectedItems.value = selectedItems.value.filter((i) => i !== id)
+}
+
+function deleteSelected() {
+	emit('delete', selectedItems.value)
+	isSelectModeOn.value = false
+	selectedItems.value = []
 }
 
 watch(selectedItems, (newValue) => {
@@ -58,7 +67,7 @@ watch(selectedItems, (newValue) => {
 				:key="item.id"
 				:item="item"
 				:action="action"
-				:isSelecting="isSelecting"
+				:isSelecting="isSelectModeOn"
 				@selectOn="selectOn"
 				@select="select"
 				@unselect="unselect"
@@ -70,6 +79,42 @@ watch(selectedItems, (newValue) => {
 			<slot name="no-items-message"></slot>
 		</div>
 	</transition>
+
+	<!-- Select Mode Actions -->
+	<transition name="slide">
+		<div
+			class="absolute -bottom-1 flex items-center justify-between left-0 z-10 w-full h-16 bg-gray-700 px-4"
+			v-if="isSelectModeOn"
+		>
+			<ChevronLeftIcon class="h-5 w-5 text-gray-400" @click="selectOff" />
+			<div class="text-gray-400">
+				{{ selectedItems.length || 0 }} seleccionados
+			</div>
+			<TrashIcon class="h-5 w-5 text-red-400" @click="deleteSelected" />
+		</div>
+	</transition>
+	<!-- End of Select Mode Actions -->
+
+	<!-- Search Mode -->
+	<div
+		class="absolute -bottom-1 left-0 z-10 w-full h-16 bg-gray-800 flex items-center px-3"
+		v-show="isSearchModeOn"
+		ref="searchDiv"
+	>
+		<MagnifyingGlassIcon class="h-7 w-7 p-1 rounded text-gray-400" />
+		<input
+			class="bg-gray-800 border-0 outline-0 h-full flex-grow pl-3"
+			type="text"
+			ref="searchInput"
+			placeholder="Buscar por nombre"
+			@input="onSearchInput($event)"
+		/>
+		<XMarkIcon
+			class="h-7 w-7 p-1 rounded text-gray-400"
+			@click="isSearchModeOn = false"
+		/>
+	</div>
+	<!-- End of Search Mode -->
 </template>
 
 <style>

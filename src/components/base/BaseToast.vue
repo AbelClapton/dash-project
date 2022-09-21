@@ -1,6 +1,6 @@
 <script setup>
 import { onMounted } from 'vue'
-import { useToastsStore } from '@/data/toasts.js'
+import { useToastsStore } from '@/stores/toasts.js'
 import {
 	CheckCircleIcon,
 	ExclamationTriangleIcon,

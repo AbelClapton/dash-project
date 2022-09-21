@@ -1,8 +1,8 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 import { onClickOutside } from '@vueuse/core'
-import { useModulesStore } from '@/data/modules.js'
-import { useServicesStore } from '@/data/services.js'
+import { useModulesStore } from '@/stores/modules.js'
+import { useServicesStore } from '@/stores/services.js'
 import { PencilIcon, TrashIcon, PlusIcon } from '@heroicons/vue/24/outline'
 import BaseInput from '@/components/base/BaseInput.vue'
 import BaseListBox from '@/components/base/BaseListBox.vue'

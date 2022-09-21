@@ -1,6 +1,6 @@
 <script setup>
 import Toast from '@/components/base/BaseToast.vue'
-import { useToastsStore } from '@/data/toasts.js'
+import { useToastsStore } from '@/stores/toasts.js'
 
 const toastsStore = useToastsStore()
 </script>

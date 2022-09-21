@@ -1,7 +1,7 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 import { onClickOutside } from '@vueuse/core'
-import { useCategoriesStore } from '@/data/categories.js'
+import { useCategoriesStore } from '@/stores/categories.js'
 import { PencilIcon, TrashIcon, PlusIcon } from '@heroicons/vue/24/outline'
 import BaseInput from '@/components/base/BaseInput.vue'
 import BaseSpinner from '@/components/BaseSpinner.vue'
@@ -75,7 +75,7 @@ onMounted(async () => {
 			<div
 				class="flex flex-col gap-1 overflow-y-auto overflow-x-hidden h-full my-2-2 -mx-2"
 				v-auto-animate
-				v-else-if="categoriesStore.brands.length"
+				v-else-if="categoriesStore.categories.length"
 			>
 				<div
 					class="flex justify-between items-center p-4 bg-slate-800 rounded"
