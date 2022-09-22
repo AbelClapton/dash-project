@@ -25,7 +25,7 @@ defineProps({
 		<!-- End of View Header -->
 
 		<!-- View Content -->
-		<div class="h-full w-full flex items-center justify-center pt-4">
+		<div class="h-full w-full flex items-start justify-center pt-4">
 			<slot></slot>
 		</div>
 		<!-- End of View Content -->

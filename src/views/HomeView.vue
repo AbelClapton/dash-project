@@ -45,7 +45,7 @@ function action(id) {
 }
 
 async function edit(id) {
-	brandsStore.update()
+	brandsStore.update(id)
 }
 
 async function refresh() {

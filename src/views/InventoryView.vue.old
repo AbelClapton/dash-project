@@ -10,7 +10,7 @@ import {
 	XMarkIcon,
 } from '@heroicons/vue/24/outline'
 import ProductsList from '@/components/ProductsList.vue'
-import BaseSpinner from '@/components/BaseSpinner.vue'
+import BaseSpinner from '@/components/base/BaseSpinner.vue'
 import FilterIcon from '@/components/icons/FilterIcon.vue'
 
 const productsStore = useProductsStore()

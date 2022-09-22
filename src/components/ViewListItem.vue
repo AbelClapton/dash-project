@@ -6,8 +6,18 @@ const props = defineProps({
 		type: Boolean,
 		default: false,
 	},
-	item: Object,
-	action: Function,
+	item: {
+		type: Object,
+		default() {
+			return new Object()
+		},
+	},
+	action: {
+		type: Function,
+		default() {
+			return
+		},
+	},
 })
 const emit = defineEmits(['selectOn', 'select', 'unselect'])
 const isSelected = ref(false)
@@ -37,7 +47,7 @@ watch(
 
 <template>
 	<div
-		class="flex justify-between items-center p-4 rounded"
+		class="w-full flex justify-between items-center p-4 rounded"
 		:class="[isSelected ? 'bg-cyan-600' : 'bg-slate-800']"
 		v-touch:hold="enterSelectMode"
 		@click="clicked"

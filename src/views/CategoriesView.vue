@@ -4,7 +4,7 @@ import { onClickOutside } from '@vueuse/core'
 import { useCategoriesStore } from '@/stores/categories.js'
 import { PencilIcon, TrashIcon, PlusIcon } from '@heroicons/vue/24/outline'
 import BaseInput from '@/components/base/BaseInput.vue'
-import BaseSpinner from '@/components/BaseSpinner.vue'
+import BaseSpinner from '@/components/base/BaseSpinner.vue'
 
 const categoriesStore = useCategoriesStore()
 
