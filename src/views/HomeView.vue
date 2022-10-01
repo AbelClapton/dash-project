@@ -1,10 +1,10 @@
 <script setup>
-import BaseView from '../components/base/BaseView.vue';
-import Calendar from '@/components/Calendar.vue'
+import BaseView from '@/components/base/BaseView.vue'
+import AppointmentsCalendar from '@/components/AppointmentsCalendar.vue'
 </script>
 
 <template>
 	<BaseView title="Home">
-    <Calendar />
+		<AppointmentsCalendar />
 	</BaseView>
 </template>
