@@ -49,8 +49,12 @@ const refresh = async () => {
 	await productsStore.fetchAll()
 }
 
+const addProduct = () => {
+  router.push({ path: 'add-product' })
+}
+
 const actions = [
-	{ icon: PlusIcon, action: router.push({ path: 'products/add' }) },
+	{ icon: PlusIcon, action: addProduct },
 	{ icon: MagnifyingGlassIcon, action: showSearch },
 	{
 		icon: EllipsisVerticalIcon,
@@ -74,12 +78,12 @@ onMounted(async () => {
 		<ViewList :items="products" :loading="loading" :action="itemAction">
 			<template #item-body="{ item }">
 				<span class="font-regular">
-					{{ brandsStore.get(item.brand) }} - {{ item.name }}
+					{{ brandsStore.get(item.brand).name }} - {{ item.name }}
 				</span>
 				<div class="flex gap-3">
 					<div class="flex items-center text-gray-300 font-light gap-1">
 						<TagIcon class="h-4 w-4" />
-						<span>{{ categoriesStore.get(item.category) }}</span>
+						<span>{{ categoriesStore.get(item.category).name }}</span>
 					</div>
 					<div class="flex items-center text-gray-300 font-light">
 						<DolarIcon class="h-4 w-4" />
