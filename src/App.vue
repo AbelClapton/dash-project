@@ -2,7 +2,6 @@
 import { ref, onMounted, nextTick, onBeforeUnmount } from 'vue'
 import { Bars3Icon } from '@heroicons/vue/24/outline'
 import MenuView from '@/views/MenuView.vue'
-import ToastsWrapper from '@/components/ToastsWrapper.vue'
 
 const isMenuOpen = ref(false)
 const windowHeight = ref(window.innerHeight)
@@ -35,7 +34,6 @@ const onResize = () => {
 				</transition>
 			</router-view>
 		</div>
-		<!-- End of Main View -->
 
 		<!-- Navigation Bar -->
 		<div
@@ -46,15 +44,9 @@ const onResize = () => {
 				<Bars3Icon class="h-5 w-5" />
 			</button>
 		</div>
-		<!-- End of Navigation Bar -->
 
 		<!-- Menu Panel -->
 		<MenuView :isOpen="isMenuOpen" @close="isMenuOpen = false" />
-		<!-- End of Menu Panel -->
-
-		<!-- Toasts Wrapper -->
-		<ToastsWrapper />
-		<!-- End of Toasts Wrapper -->
 	</div>
 </template>
 

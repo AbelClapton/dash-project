@@ -1,6 +1,7 @@
 <script setup>
 import { computed } from 'vue'
 import CalendarEvent from '@/components/CalendarEvent.vue'
+
 const props = defineProps({
 	user: Object,
 })

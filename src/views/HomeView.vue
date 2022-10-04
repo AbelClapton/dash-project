@@ -1,10 +1,10 @@
 <script setup>
 import BaseView from '@/components/base/BaseView.vue'
-import AppointmentsCalendar from '@/components/AppointmentsCalendar.vue'
+import ScheduleDay from '@/modules/schedule/ScheduleDay.vue'
 </script>
 
 <template>
-	<BaseView title="Home">
-		<AppointmentsCalendar />
+	<BaseView>
+		<ScheduleDay />
 	</BaseView>
 </template>
