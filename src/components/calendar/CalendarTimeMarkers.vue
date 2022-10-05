@@ -4,7 +4,7 @@ const markers = ref([])
 
 const initializeMarkers = () => {
 	// from 08:00 to end
-	for (let i = 1, h = 7; i < 30; i++) {
+	for (let i = 0, h = 8; i < 30; i++) {
 		// half hour steps
 		let H = h + Math.floor(i / 2)
 
