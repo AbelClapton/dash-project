@@ -21,6 +21,10 @@ const showFooter = computed(() => !route.meta.hideFooter)
 </template>
 
 <style>
+*::-webkit-scrollbar {
+  display: none;
+}
+
 html {
 	@apply h-screen;
 }
