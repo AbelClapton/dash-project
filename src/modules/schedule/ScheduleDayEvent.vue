@@ -36,7 +36,7 @@ onMounted(() => {
 </script>
 
 <template>
-	<div class="w-full absolute left-0 pt-0.5 pr-1 ml-0.5" :style="styleObject">
+	<div class="w-full" :style="styleObject">
 		<div
 			class="h-full w-full bg-cyan-500 rounded flex items-center justify-center"
 		>

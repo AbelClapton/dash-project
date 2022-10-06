@@ -1,10 +1,10 @@
 <script setup>
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
-import CalendarTimeMarkers from '../../components/calendar/CalendarTimeMarkers.vue'
-import CalendarClock from '../../components/calendar/CalendarClock.vue'
-import FloatingButton from '../../components/FloatingButton.vue'
-/* import FloatingButton from '@/components/FloatingButton.vue' */
+import CalendarTimeMarkers from '@/components/calendar/CalendarTimeMarkers.vue'
+import CalendarClock from '@/components/calendar/CalendarClock.vue'
+import ScheduleDayEvent from '@/modules/schedule/ScheduleDayEvent.vue'
+import FloatingButton from '@/components/FloatingButton.vue'
 
 // data
 const router = useRouter()
@@ -16,11 +16,18 @@ const employees = ref([
 			'https://www.creative-tim.com/learning-lab/tailwind-starter-kit/img/team-4-470x470.png',
 		events: [
 			{ id: 1, start: '08:00', end: '10:00', title: 'Test' },
-			{ id: 1, start: '11:00', end: '11:30', title: 'Test' },
+			{ id: 2, start: '11:00', end: '11:30', title: 'Test' },
 		],
 	},
 	{ id: 2, name: 'Dassiel Morales' },
-	{ id: 3, name: 'Denzel Companioni' },
+	{
+		id: 3,
+		name: 'Denzel Companioni',
+		events: [
+			{ id: 3, start: '08:00', end: '10:00', title: 'Test' },
+			{ id: 4, start: '11:00', end: '11:30', title: 'Test' },
+		],
+	},
 	{ id: 4, name: 'Marcos Yegua' },
 ])
 
@@ -72,6 +79,7 @@ const onScroll = (event) => {
 			</div>
 		</div>
 
+		<!-- Grid -->
 		<div class="h-full flex gap-4 overflow-hidden">
 			<!-- Time Markers -->
 			<div class="h-full min-w-fit overflow-y-hidden" ref="timeMarkersDiv">
@@ -80,11 +88,11 @@ const onScroll = (event) => {
 				</div>
 			</div>
 
-			<!-- Events -->
+			<!-- Event Cells -->
 			<div class="h-full w-full overflow-auto" @scroll="onScroll">
 				<div class="flex">
 					<div
-						class="min-w-[33.3%] flex flex-col border-l border-l-gray-700"
+						class="min-w-[33.3%] flex flex-col border-l border-l-gray-700 relative"
 						v-for="employee in employees"
 						:key="employee.id"
 					>
@@ -93,6 +101,13 @@ const onScroll = (event) => {
 							v-for="index in 24"
 							:key="index"
 						></div>
+						<!-- Event Items -->
+						<ScheduleDayEvent
+							class="absolute left-0 w-full"
+							v-for="event in employee.events"
+							:key="event.id"
+							:event="event"
+						/>
 					</div>
 				</div>
 			</div>
