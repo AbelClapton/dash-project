@@ -37,9 +37,9 @@ const onScroll = (event) => {
 </script>
 
 <template>
-	<div class="h-full w-full flex flex-col">
+	<div class="h-full w-full flex flex-col gap-3">
 		<!-- Avatar Group -->
-		<div class="w-full flex py-6">
+		<div class="w-full flex">
 			<div class="min-w-[3.5rem]"></div>
 			<div class="h-full w-full overflow-x-hidden" ref="avatarsDiv">
 				<div class="min-w-full flex">
@@ -54,10 +54,10 @@ const onScroll = (event) => {
 			</div>
 		</div>
 
-		<div class="h-full flex gap-4">
+		<div class="h-full flex gap-4 overflow-hidden">
 			<!-- Time Markers -->
 			<div class="h-full min-w-fit overflow-y-hidden" ref="timeMarkersDiv">
-				<div class="min-h-full w-full pt-3">
+				<div class="w-full py-3">
 					<CalendarTimeMarkers />
 				</div>
 			</div>
@@ -71,8 +71,8 @@ const onScroll = (event) => {
 						:key="employee.id"
 					>
 						<div
-							class="h-6 border-t border-gray-500 odd:border-t-gray-700 last:border-b last:border-b-gray-500 first:border-t-0"
-							v-for="index in 30"
+							class="h-6 border-t border-gray-500 odd:border-t-gray-700 last:border-b first:border-t-0"
+							v-for="index in 31"
 							:key="index"
 						></div>
 					</div>

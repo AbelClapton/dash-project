@@ -1,5 +1,4 @@
 <script setup>
-import { ref, computed, onMounted, onUnmounted } from 'vue'
 import {
 	CalendarDaysIcon,
 	TagIcon,
@@ -10,9 +9,7 @@ import {
 	TicketIcon,
 	RectangleStackIcon,
 } from '@heroicons/vue/24/outline'
-import interact from 'interactjs'
 
-// eslint-disable-next-line no-unused-vars
 const props = defineProps({
 	isOpen: {
 		type: Boolean,
@@ -20,45 +17,12 @@ const props = defineProps({
 	},
 })
 
-// eslint-disable-next-line no-unused-vars
 const emit = defineEmits(['close'])
-
-const interactElement = ref(null)
-const interactPosition = ref(0)
-
-const transformString = computed(() => {
-	return `translateY(${interactPosition.value}px)`
-})
-
-onMounted(() => {
-	interact('#menu').draggable({
-		onmove: (event) => {
-			interactSetPosition(interactPosition.value + event.dy)
-		},
-		onend: () => {
-			if (interactPosition.value > 200) emit('close')
-			resetMenuPosition()
-		},
-	})
-})
-
-onUnmounted(() => {
-	interact('#menu').unset()
-})
-
-function interactSetPosition(coordinates) {
-	interactPosition.value = coordinates
-}
-
-function resetMenuPosition() {
-	interactSetPosition(0)
-}
 </script>
 
 <template>
 	<div>
 		<div
-			id="menu"
 			class="absolute left-0 transition-all ease-in-out touch-none text-white"
 			:class="[isOpen ? 'top-0' : 'top-full']"
 			:style="{ transform: transformString }"
