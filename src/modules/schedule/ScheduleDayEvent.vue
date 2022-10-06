@@ -11,14 +11,16 @@ const styleObject = ref({
 })
 
 const calculateTop = () => {
-	const sh = parseInt(props.event.start.slice(0, 2))
-	return `${4 + (sh - 8) * 3.25}rem`
-	//return `${(sh - 8) * 8}rem`
+  const [h, m] = props.event.start
+    .split(':')
+    .map(e => parseInt(e))
+  console.log(h, m)
+	return `${h * 3 + m * 0.05}rem`
 }
 
 const calculateHeight = () => {
 	const diff = getDiff(props.event.start, props.event.end)
-	const h = (diff / (15 * 60 * 1000)) * 0.8
+	const h = (diff / (15 * 60 * 1000)) * 0.75
 	return `${h}rem`
 }
 
@@ -36,12 +38,15 @@ onMounted(() => {
 </script>
 
 <template>
-	<div class="w-full" :style="styleObject">
+	<div class="w-full p-[0.0375rem]" :style="styleObject">
 		<div
-			class="h-full w-full bg-cyan-500 rounded flex items-center justify-center"
+			class="h-full w-full bg-cyan-500 rounded flex items-center justify-center text-sm"
 		>
-			<span class="text-center">
+			<span class="text-center text-sm">
 				{{ event.title }}
+			</span>
+			<span class="text-center text-sm">
+				{{ styleObject.top }}
 			</span>
 		</div>
 	</div>

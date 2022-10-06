@@ -4,7 +4,7 @@ const markers = ref([])
 
 const initializeMarkers = () => {
 	// from 01:00 to 23:00
-	for (let h = 1; h < 23; h++) {
+	for (let h = 1; h <= 23; h++) {
 		let H = h
 
 		// format hour

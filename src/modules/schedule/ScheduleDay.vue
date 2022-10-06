@@ -16,15 +16,18 @@ const employees = ref([
 			'https://www.creative-tim.com/learning-lab/tailwind-starter-kit/img/team-4-470x470.png',
 		events: [
 			{ id: 1, start: '08:00', end: '10:00', title: 'Test' },
-			{ id: 2, start: '11:00', end: '11:30', title: 'Test' },
 		],
 	},
-	{ id: 2, name: 'Dassiel Morales' },
+	{ id: 2, name: 'Dassiel Morales', events: [
+    { id: 7, start: '10:00', end: '10:15', title: 'Test' },
+    { id: 8, start: '10:15', end: '10:30', title: 'Test' },
+    { id: 9, start: '10:30', end: '10:45', title: 'Test' },
+    { id: 0, start: '10:45', end: '11:00', title: 'Test' },
+  ] },
 	{
 		id: 3,
 		name: 'Denzel Companioni',
 		events: [
-			{ id: 3, start: '08:00', end: '10:00', title: 'Test' },
 			{ id: 4, start: '11:00', end: '11:30', title: 'Test' },
 		],
 	},
