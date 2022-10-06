@@ -2,6 +2,8 @@
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import CalendarTimeMarkers from '../../components/calendar/CalendarTimeMarkers.vue'
+import CalendarClock from '../../components/calendar/CalendarClock.vue'
+import FloatingButton from '../../components/FloatingButton.vue'
 /* import FloatingButton from '@/components/FloatingButton.vue' */
 
 // data
@@ -37,11 +39,27 @@ const onScroll = (event) => {
 </script>
 
 <template>
-	<div class="h-full w-full flex flex-col gap-3">
+	<div class="h-full w-full flex flex-col relative">
 		<!-- Avatar Group -->
-		<div class="w-full flex">
-			<div class="min-w-[3.5rem]"></div>
-			<div class="h-full w-full overflow-x-hidden" ref="avatarsDiv">
+		<div class="w-full flex shadow-lg pb-1.5">
+			<div class="flex items-center justify-center min-w-[3.5rem] -ml-3 mr-3">
+				<div class="flex flex-col items-center justify-center gap-0.5">
+					<span class="text-sm text-cyan-600 font-light">hoy</span>
+					<div
+						class="bg-cyan-600 text-slate-700 font-bold text-lg rounded-full h-8 w-8 flex items-center justify-center"
+					>
+						19
+					</div>
+					<span class="text-xs text-cyan-600 font-light">
+						<!-- TODO: make timeline -->
+						<CalendarClock />
+					</span>
+				</div>
+			</div>
+			<div
+				class="h-full w-full flex items-center overflow-x-hidden"
+				ref="avatarsDiv"
+			>
 				<div class="min-w-full flex">
 					<div
 						class="min-w-[33.3%] flex justify-center"
@@ -57,7 +75,7 @@ const onScroll = (event) => {
 		<div class="h-full flex gap-4 overflow-hidden">
 			<!-- Time Markers -->
 			<div class="h-full min-w-fit overflow-y-hidden" ref="timeMarkersDiv">
-				<div class="w-full py-3">
+				<div class="w-full py-[2.375rem]">
 					<CalendarTimeMarkers />
 				</div>
 			</div>
@@ -66,19 +84,20 @@ const onScroll = (event) => {
 			<div class="h-full w-full overflow-auto" @scroll="onScroll">
 				<div class="flex">
 					<div
-						class="min-w-[33.3%] flex flex-col border-l border-l-gray-700 first:border-l-gray-500"
+						class="min-w-[33.3%] flex flex-col border-l border-l-gray-700"
 						v-for="employee in employees"
 						:key="employee.id"
 					>
 						<div
-							class="h-6 border-t border-gray-500 odd:border-t-gray-700 last:border-b first:border-t-0"
-							v-for="index in 31"
+							class="h-12 border-t border-dashed border-gray-700 first:border-0"
+							v-for="index in 24"
 							:key="index"
 						></div>
 					</div>
 				</div>
 			</div>
 		</div>
+		<FloatingButton class="absolute right-0 bottom-3" />
 	</div>
 </template>
 

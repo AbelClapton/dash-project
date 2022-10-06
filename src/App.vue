@@ -1,7 +1,6 @@
 <script setup>
 import { computed } from 'vue'
 import { useRoute } from 'vue-router'
-import TheFooter from '@/components/TheFooter.vue'
 
 // data
 const route = useRoute()
@@ -11,16 +10,13 @@ const showFooter = computed(() => !route.meta.hideFooter)
 <template>
 	<div class="h-full w-full flex flex-col">
 		<!-- Main View -->
-		<div class="h-[92.5%] p-4 text-white">
+		<div class="h-full pt-4 px-4 text-white">
 			<router-view v-slot="{ Component }">
 				<transition name="fade" mode="out-in">
 					<component :is="Component" />
 				</transition>
 			</router-view>
 		</div>
-
-		<!-- Navigation Bar -->
-		<TheFooter class="h-[7.5%]" v-if="showFooter" />
 	</div>
 </template>
 
