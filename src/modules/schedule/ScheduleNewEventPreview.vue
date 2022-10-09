@@ -52,52 +52,52 @@ function addTime(time, amount) {
 }
 
 // upper control resize
-const upperControl = ref(null)
+const startControl = ref(null)
 const {
-	isSwiping: upperSwiping,
-	coordsStart: upperStart,
-	coordsEnd: upperEnd,
-} = useSwipe(upperControl, {
+	isSwiping: startSwiping,
+	coordsStart: startStart,
+	coordsEnd: startEnd,
+} = useSwipe(startControl, {
 	passive: false,
 	threshold: 0,
 	onSwipe() {
-		const delta = Math.floor((upperEnd.y - upperStart.y) / 12)
+		const delta = Math.floor((startEnd.y - startStart.y) / 12)
 
 		if (Math.abs(delta)) {
-			upperStart.y += delta * 12
+			startStart.y += delta * 12
 			event.value.start = addTime(event.value.start, delta)
 		}
 	},
 })
 
 // bottom control resize
-const bottomControl = ref(null)
+const endControl = ref(null)
 const {
-	isSwiping: bottomSwiping,
-	coordsStart: bottomStart,
-	coordsEnd: bottomEnd,
-} = useSwipe(bottomControl, {
+	isSwiping: endSwiping,
+	coordsStart: endStart,
+	coordsEnd: endEnd,
+} = useSwipe(endControl, {
 	passive: false,
 	threshold: 0,
 	onSwipe() {
-		const delta = Math.floor((bottomEnd.y - bottomStart.y) / 12)
+		const delta = Math.floor((endEnd.y - endStart.y) / 12)
 
 		if (Math.abs(delta)) {
-			bottomStart.y += delta * 12
+			endStart.y += delta * 12
 			event.value.end = addTime(event.value.end, delta)
 		}
 	},
 })
 
 // event move
-const eventDiv = ref(null)
-const { coordsStart, coordsEnd } = useSwipe(eventDiv, {
+const moveControl = ref(null)
+const { coordsStart, coordsEnd } = useSwipe(moveControl, {
 	passive: false,
 	threshold: 0,
 	onSwipe() {
 		const delta = Math.floor((coordsEnd.y - coordsStart.y) / 12)
 
-		if (Math.abs(delta) && !upperSwiping.value && !bottomSwiping.value) {
+		if (Math.abs(delta) && !startSwiping.value && !endSwiping.value) {
 			coordsStart.y += delta * 12
 			event.value.start = addTime(event.value.start, delta)
 			event.value.end = addTime(event.value.end, delta)
@@ -110,18 +110,23 @@ const { coordsStart, coordsEnd } = useSwipe(eventDiv, {
 	<div
 		class="w-full h-full border-2 border-cyan-500 rounded shadow-md shadow-black transition-all duration-100"
 		:style="{ top, height }"
-		ref="eventDiv"
 	>
-		<div class="h-full w-full relative">
+		<div class="h-full w-full flex items-center justify-center relative">
+			<!-- Upper Control -->
 			<div
 				class="absolute -top-2 left-2.5 h-3.5 w-3.5 bg-cyan-900 rounded-full flex items-center justify-center"
-				ref="upperControl"
+				ref="startControl"
 			>
 				<div class="h-2 w-2 bg-cyan-500 rounded-full"></div>
 			</div>
+
+			<!-- Central Control -->
+			<div class="w-full h-1/2" ref="moveControl"></div>
+
+			<!-- Bottom Control -->
 			<div
 				class="absolute -bottom-2 right-2.5 h-3.5 w-3.5 bg-cyan-900 rounded-full flex items-center justify-center"
-				ref="bottomControl"
+				ref="endControl"
 			>
 				<div class="h-2 w-2 bg-cyan-500 rounded-full"></div>
 			</div>

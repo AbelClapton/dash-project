@@ -29,6 +29,7 @@ const event = ref({
 	end: '11:00',
 	employee: 1,
 })
+
 // methods
 const onScroll = (event) => {
 	avatarsDiv.value.scrollLeft = event.target.scrollLeft
@@ -39,6 +40,7 @@ const getHour = (hour) => {
 	return hour < 10 ? `0${hour}:00` : `${hour}:00`
 }
 
+// TODO: call a select function to prevent resizing on cell change
 const newEvent = (e) => {
 	event.value.start = e.target.dataset.start
 	event.value.end = e.target.dataset.end
@@ -48,7 +50,7 @@ const newEvent = (e) => {
 </script>
 
 <template>
-	<div class="h-full w-full flex flex-col relative">
+	<div class="h-full w-full flex flex-col">
 		<!-- Avatar Group -->
 		<div class="w-full flex shadow-lg pt-4 pb-1.5">
 			<div class="flex items-center justify-center min-w-[3.5rem] mx-1">
@@ -65,10 +67,7 @@ const newEvent = (e) => {
 					</span>
 				</div>
 			</div>
-			<div
-				class="h-full w-full flex items-center overflow-x-hidden"
-				ref="avatarsDiv"
-			>
+			<div class="w-full flex items-center overflow-x-hidden" ref="avatarsDiv">
 				<div class="min-w-full flex">
 					<div
 						class="min-w-[33.3%] flex justify-center"
@@ -82,16 +81,16 @@ const newEvent = (e) => {
 		</div>
 
 		<!-- Grid -->
-		<div class="h-full flex gap-4 overflow-hidden pl-3">
+		<div class="flex gap-4 overflow-hidden pl-3">
 			<!-- Time Markers -->
-			<div class="h-full min-w-fit overflow-y-hidden" ref="timeMarkersDiv">
+			<div class="min-w-fit overflow-y-hidden" ref="timeMarkersDiv">
 				<div class="w-full py-[2.375rem]">
 					<CalendarTimeMarkers />
 				</div>
 			</div>
 
 			<!-- Event Cells -->
-			<div class="h-full w-full overflow-auto" ref="grid" @scroll="onScroll">
+			<div class="w-full overflow-auto" ref="grid" @scroll="onScroll">
 				<div class="flex">
 					<div
 						class="min-w-[33.3%] flex flex-col border-l border-l-gray-700 relative"
@@ -118,7 +117,7 @@ const newEvent = (e) => {
 						<ScheduleNewEventPreview
 							class="absolute left-0 text-sm"
 							v-model="event"
-							v-if="employee.id == event.employee"
+							v-if="showNewEventPanel && employee.id == event.employee"
 						/>
 					</div>
 				</div>

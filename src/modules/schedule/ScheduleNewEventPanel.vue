@@ -1,5 +1,5 @@
 <script setup>
-import { ref, watch } from 'vue'
+import { ref, computed, watch } from 'vue'
 import { useSwipe, useInterval } from '@vueuse/core'
 import {
 	XMarkIcon,
@@ -19,9 +19,12 @@ const emit = defineEmits(['dispose'])
 
 // data
 const panel = ref(null)
-const top = ref(600)
+const top = ref(650)
+const bgColor = computed(() =>
+	currentBreakpoint.value ? 'bg-gray-700' : 'bg-gray-800'
+)
 const offsetY = ref(0)
-const breakpoints = [0, 750, 775]
+const breakpoints = [0, 650, 775]
 let currentBreakpoint = ref(1)
 
 // TODO: make into a composable
@@ -75,14 +78,14 @@ const dispose = () => {
 
 <template>
 	<div
-		class="absolute bottom-0 left-0 right-0 bg-gray-700 duration-100 ease-in-out rounded-t-3xl"
-		:class="{ 'transition-all': isSwiping }"
+		class="absolute bottom-0 left-0 right-0 duration-100 ease-in-out rounded-t-3xl"
+		:class="[{ 'transition-all': isSwiping }, bgColor]"
 		:style="{ top: `${top}px` }"
 	>
 		<!-- Panel Swipe Area -->
 		<div class="flex align-center justify-center" ref="panel">
-			<ChevronDownIcon class="h-5 w-5" v-if="state === 3" />
-			<ChevronUpIcon class="h-5 w-5" v-else-if="state === 1" />
+			<ChevronDownIcon class="h-5 w-5" v-if="currentBreakpoint === 3" />
+			<ChevronUpIcon class="h-5 w-5" v-else-if="currentBreakpoint === 1" />
 			<div class="h-5 w-10 bg-gray-500" v-else></div>
 		</div>
 

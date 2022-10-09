@@ -1,22 +1,27 @@
 <script setup>
-import { computed } from 'vue'
 import { useRoute } from 'vue-router'
+import { Bars3Icon } from '@heroicons/vue/24/outline'
 
 // data
 const route = useRoute()
-const showFooter = computed(() => !route.meta.hideFooter)
 </script>
 
 <template>
 	<div class="h-full w-full flex flex-col">
+		<!-- Header -->
+		<div class="flex items-center p-4 text-white gap-2">
+			<Bars3Icon class="h-7 w-7" />
+			<h3 class="text-xl flex-grow">{{ route.name }}</h3>
+		</div>
+
 		<!-- Main View -->
-		<div class="h-full text-white">
+		<main class="h-full text-white overflow-hidden">
 			<router-view v-slot="{ Component }">
 				<transition name="fade" mode="out-in">
 					<component :is="Component" />
 				</transition>
 			</router-view>
-		</div>
+		</main>
 	</div>
 </template>
 
@@ -26,7 +31,7 @@ const showFooter = computed(() => !route.meta.hideFooter)
 }
 
 html {
-	@apply h-screen;
+	@apply h-full;
 }
 
 body {

@@ -11,7 +11,6 @@ import {
 } from '@heroicons/vue/24/outline'
 
 const route = useRoute()
-const eventId = route.params.id
 </script>
 
 <template>
