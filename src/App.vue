@@ -10,7 +10,7 @@ const showFooter = computed(() => !route.meta.hideFooter)
 <template>
 	<div class="h-full w-full flex flex-col">
 		<!-- Main View -->
-		<div class="h-full pt-4 px-4 text-white">
+		<div class="h-full text-white">
 			<router-view v-slot="{ Component }">
 				<transition name="fade" mode="out-in">
 					<component :is="Component" />
@@ -22,7 +22,7 @@ const showFooter = computed(() => !route.meta.hideFooter)
 
 <style>
 *::-webkit-scrollbar {
-  display: none;
+	display: none;
 }
 
 html {

@@ -90,6 +90,11 @@ const router = createRouter({
 			component: () => import('../modules/schedule/ScheduleNew.vue'),
 		},
 		{
+			path: '/schedule/events/:id',
+			name: 'event-details',
+			component: () => import('../modules/schedule/ScheduleEventDetails.vue'),
+		},
+		{
 			path: '/modules',
 			name: 'modules',
 			component: () => import('../views/ModulesView.vue'),

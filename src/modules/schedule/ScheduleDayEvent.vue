@@ -1,28 +1,20 @@
 <script setup>
-import { onMounted, ref } from 'vue'
+import { computed } from 'vue'
 
 const props = defineProps({
 	event: Object,
 })
 
-const styleObject = ref({
-	height: '100px',
-	top: 0,
+const top = computed(() => {
+	const [h, m] = props.event.start.split(':').map((e) => parseInt(e))
+	return `${h * 3 + m * 0.05}rem`
 })
 
-const calculateTop = () => {
-  const [h, m] = props.event.start
-    .split(':')
-    .map(e => parseInt(e))
-  console.log(h, m)
-	return `${h * 3 + m * 0.05}rem`
-}
-
-const calculateHeight = () => {
+const height = computed(() => {
 	const diff = getDiff(props.event.start, props.event.end)
 	const h = (diff / (15 * 60 * 1000)) * 0.75
 	return `${h}rem`
-}
+})
 
 function getDiff(start, end) {
 	const s = new Date(`2000-01-01T${start}:00`)
@@ -30,15 +22,10 @@ function getDiff(start, end) {
 
 	return e - s
 }
-
-onMounted(() => {
-	styleObject.value.height = calculateHeight()
-	styleObject.value.top = calculateTop()
-})
 </script>
 
 <template>
-	<div class="w-full p-[0.0375rem]" :style="styleObject">
+	<div class="w-full p-[0.0375rem]" :style="{ top, height }">
 		<div
 			class="h-full w-full bg-cyan-500 rounded flex items-center justify-center text-sm"
 		>
