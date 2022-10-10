@@ -1,15 +1,21 @@
 <script setup>
+import { ref } from 'vue'
 import { useRoute } from 'vue-router'
 import { Bars3Icon } from '@heroicons/vue/24/outline'
+import TheNavbar from '@/components/TheNavbar.vue'
 
 // data
 const route = useRoute()
+const showNavbar = ref(false)
 </script>
 
 <template>
 	<div class="h-full w-full flex flex-col">
 		<!-- Header -->
-		<div class="flex items-center p-4 text-white gap-2">
+		<div
+			class="flex items-center p-4 text-white gap-2"
+			@click="showNavbar = true"
+		>
 			<Bars3Icon class="h-7 w-7" />
 			<h3 class="text-xl flex-grow">{{ route.name }}</h3>
 		</div>
@@ -23,6 +29,8 @@ const route = useRoute()
 			</router-view>
 		</main>
 	</div>
+
+	<TheNavbar v-show="showNavbar" @dispose="showNavbar = false" />
 </template>
 
 <style>
@@ -36,6 +44,7 @@ html {
 
 body {
 	@apply h-full bg-gray-900;
+	overscroll-behavior: contain;
 }
 
 #app {

@@ -1,6 +1,6 @@
 <script setup>
-import { ref, computed, watch } from 'vue'
-import { useSwipe, useInterval } from '@vueuse/core'
+import { ref, computed, watch, nextTick } from 'vue'
+import { useSwipe } from '@vueuse/core'
 import {
 	XMarkIcon,
 	ChevronDownIcon,
@@ -8,83 +8,73 @@ import {
 } from '@heroicons/vue/24/outline'
 
 // props
-defineProps({
-	event: {
+const props = defineProps({
+	modelValue: {
 		type: Object,
 		default: () => ({}),
 	},
+})
+
+const event = computed({
+	get: () => props.modelValue,
+	set: (value) => emit('update:modelValue', value),
 })
 // emits
 const emit = defineEmits(['dispose'])
 
 // data
 const panel = ref(null)
-const top = ref(650)
+const top = ref(0)
+const titleInput = ref(null)
 const bgColor = computed(() =>
-	currentBreakpoint.value ? 'bg-gray-700' : 'bg-gray-800'
+	currentBreakpoint.value ? 'bg-neutral-600' : 'bg-neutral-700'
 )
-const offsetY = ref(0)
-const breakpoints = [0, 650, 775]
-let currentBreakpoint = ref(1)
-
-// TODO: make into a composable
-// composables
-const { counter, resume, pause } = useInterval(10, {
-	controls: true,
-	immediate: false,
-})
-
-const { isSwiping, direction, lengthY } = useSwipe(panel, {
-	passive: false,
-	onSwipeStart() {
-		counter.value = 0
-		resume()
-	},
-	onSwipe() {
-		const newTop = offsetY.value - lengthY.value
-		top.value = newTop > 0 ? newTop : 0
-	},
-	onSwipeEnd() {
-		pause()
-		if (counter.value < 50) nextBreakpoint(direction.value)
-		else resizeToBreakpoint()
-	},
-})
+const breakpoints = [0, 600, 725]
+let currentBreakpoint = ref(0)
 
 // methods
-const resizeToBreakpoint = () => {
-	if (top.value < 300) currentBreakpoint.value = 0
-	else if (top.value < 600) currentBreakpoint.value = 1
-	else currentBreakpoint = 2
+const nextBreakpoint = () => {
+	if (currentBreakpoint.value < 2) currentBreakpoint.value++
 }
-
-const nextBreakpoint = (direction) => {
-	if (direction === 'DOWN' && currentBreakpoint.value < 2)
-		return currentBreakpoint.value++
-	if (direction === 'UP' && currentBreakpoint.value > 0)
-		return currentBreakpoint.value--
+const previousBreakpoint = () => {
+	if (currentBreakpoint.value) currentBreakpoint.value--
 }
 
 watch(currentBreakpoint, (newBreakpoint) => {
 	top.value = breakpoints[newBreakpoint]
-	offsetY.value = top.value
+	if (newBreakpoint === 0)
+		nextTick(() => {
+			titleInput.value.focus()
+		})
 })
 
 const dispose = () => {
-	currentBreakpoint.value = 1
-	emit('dispose')
+	currentBreakpoint.value = 2
+	setTimeout(() => {
+		emit('dispose')
+	}, 200)
 }
+
+const { isSwiping, direction } = useSwipe(panel, {
+	passive: true,
+	threshold: 0,
+	onSwipeEnd() {
+		if (direction.value === 'DOWN') nextBreakpoint()
+		else previousBreakpoint()
+	},
+})
 </script>
 
 <template>
 	<div
-		class="absolute bottom-0 left-0 right-0 duration-100 ease-in-out rounded-t-3xl"
-		:class="[{ 'transition-all': isSwiping }, bgColor]"
+		class="absolute bottom-0 left-0 right-0 flex flex-col duration-300 ease-in-out rounded-t-3xl overflow-hidden"
+		:class="[{ 'transition-all': !isSwiping }, bgColor]"
 		:style="{ top: `${top}px` }"
+		ref="panel"
 	>
 		<!-- Panel Swipe Area -->
-		<div class="flex align-center justify-center" ref="panel">
-			<ChevronDownIcon class="h-5 w-5" v-if="currentBreakpoint === 3" />
+		<div class="flex align-center justify-center" @click="previousBreakpoint">
+			<ChevronDownIcon class="h-5 w-5" v-if="currentBreakpoint === 0" />
 			<ChevronUpIcon class="h-5 w-5" v-else-if="currentBreakpoint === 1" />
 			<div class="h-5 w-10 bg-gray-500" v-else></div>
 		</div>
@@ -94,8 +84,8 @@ const dispose = () => {
 			class="w-full flex items-center justify-between p-4 z-10"
 			v-if="currentBreakpoint < 2"
 		>
-			<button @click="dispose">
-				<XMarkIcon class="h-6 w-6" />
+			<button class="p-2 text-gray-400 active:rounded-md" @click="dispose">
+				<XMarkIcon class="h-7 w-7 stroke-2" />
 			</button>
 			<button class="bg-cyan-500 py-1 px-3 rounded-full text-lg">
 				Guardar
@@ -103,13 +93,45 @@ const dispose = () => {
 		</div>
 
 		<!-- Panel Content -->
-		<div class="w-full flex flex-col px-16">
-			<input
-				class="bg-transparent text-2xl placeholder:text-white"
-				type="text"
-				placeholder="Añade un título"
-			/>
-			<p>Hoy - {{ event.start }} - {{ event.end }}</p>
+		<div class="w-full relative">
+			<Transition name="fade">
+				<div
+					class="top-0 w-full flex flex-col"
+					v-if="currentBreakpoint === 1"
+					@click="previousBreakpoint"
+				>
+					<div class="w-full px-16">
+						<div class="w-full bg-transparent text-2xl font-medium">
+							{{ event.title || 'Añade un título' }}
+						</div>
+						<p>Hoy - {{ event.start }} - {{ event.end }}</p>
+					</div>
+				</div>
+				<div
+					class="top-0 w-full flex flex-col"
+					v-else-if="currentBreakpoint === 0"
+				>
+					<div class="w-full px-16">
+						<input
+							class="w-full text-white placeholder:text-white caret-cyan-500 bg-transparent text-2xl font-medium focus-visible:outline-0 focus-visible:border-0"
+							placeholder="Añade un título"
+							v-model="event.title"
+							ref="titleInput"
+						/>
+					</div>
+				</div>
+			</Transition>
 		</div>
 	</div>
 </template>
+
+<style>
+.fade-enter-from,
+.fade-leave-to {
+	opacity: 0;
+}
+.fade-enter-active,
+.fade-leave-active {
+	transition: opacity 0.3s ease-in-out;
+}
+</style>
