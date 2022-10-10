@@ -1,10 +1,12 @@
 <script setup>
 import { ref, computed, watch, nextTick } from 'vue'
 import { useSwipe } from '@vueuse/core'
+import { Switch } from '@headlessui/vue'
 import {
 	XMarkIcon,
 	ChevronDownIcon,
 	ChevronUpIcon,
+	ClockIcon,
 } from '@heroicons/vue/24/outline'
 
 // props
@@ -25,9 +27,10 @@ const emit = defineEmits(['dispose'])
 // data
 const panel = ref(null)
 const top = ref(0)
+const offset = ref(0)
 const titleInput = ref(null)
 const bgColor = computed(() =>
-	currentBreakpoint.value ? 'bg-neutral-600' : 'bg-neutral-700'
+	currentBreakpoint.value ? 'bg-neutral-600' : 'bg-neutral-800'
 )
 const breakpoints = [0, 600, 725]
 let currentBreakpoint = ref(0)
@@ -49,26 +52,36 @@ watch(currentBreakpoint, (newBreakpoint) => {
 })
 
 const dispose = () => {
-	currentBreakpoint.value = 2
+	currentBreakpoint.value = 0
 	setTimeout(() => {
 		emit('dispose')
 	}, 200)
 }
 
-const { isSwiping, direction } = useSwipe(panel, {
+const { direction } = useSwipe(panel, {
 	passive: true,
 	threshold: 0,
+	onSwipe() {
+		/* top.value = Math.floor(-lengthY.value) */
+	},
 	onSwipeEnd() {
 		if (direction.value === 'DOWN') nextBreakpoint()
 		else previousBreakpoint()
+		offset.value = breakpoints[currentBreakpoint.value]
 	},
+})
+
+const test = ref({
+	start: '2022-10-14',
+	end: '2022-10-14',
+	isAllDay: true,
 })
 </script>
 
 <template>
 	<div
-		class="absolute bottom-0 left-0 right-0 flex flex-col duration-300 ease-in-out rounded-t-3xl overflow-hidden"
-		:class="[{ 'transition-all': !isSwiping }, bgColor]"
+		class="absolute bottom-0 left-0 right-0 flex flex-col duration-500 transition-all ease-in-out rounded-t-3xl overflow-hidden"
+		:class="[bgColor]"
 		:style="{ top: `${top}px` }"
 		ref="panel"
 	>
@@ -95,29 +108,52 @@ const { isSwiping, direction } = useSwipe(panel, {
 		<!-- Panel Content -->
 		<div class="w-full relative">
 			<Transition name="fade">
+				<!-- Reduced View -->
 				<div
-					class="top-0 w-full flex flex-col"
+					class="absolute top-0 w-full flex flex-col"
 					v-if="currentBreakpoint === 1"
 					@click="previousBreakpoint"
 				>
-					<div class="w-full px-16">
-						<div class="w-full bg-transparent text-2xl font-medium">
+					<div class="w-full px-[4.5rem]">
+						<div class="w-full bg-transparent text-2xl">
 							{{ event.title || 'Añade un título' }}
 						</div>
-						<p>Hoy - {{ event.start }} - {{ event.end }}</p>
+						<p>Hoy &#8226; {{ event.start }} - {{ event.end }}</p>
 					</div>
 				</div>
+
+				<!-- Full View -->
 				<div
-					class="top-0 w-full flex flex-col"
+					class="absolute top-0 w-full flex flex-col gap-3"
 					v-else-if="currentBreakpoint === 0"
 				>
-					<div class="w-full px-16">
+					<div class="w-full px-[4.5rem]">
 						<input
-							class="w-full text-white placeholder:text-white caret-cyan-500 bg-transparent text-2xl font-medium focus-visible:outline-0 focus-visible:border-0"
+							class="text-2xl"
 							placeholder="Añade un título"
 							v-model="event.title"
 							ref="titleInput"
 						/>
+					</div>
+					<hr class="border-gray-500" />
+					<div class="flex flex-col gap-2 py-1 items-center px-6">
+						<div class="flex gap-[1.25rem] items-center w-full">
+							<ClockIcon class="w-7 h-7" />
+							<span class="text-lg flex-grow">Todo el día</span>
+							<Switch
+								v-model="test.isAllDay"
+								:class="test.isAllDay ? 'bg-cyan-500' : 'bg-neutral-500'"
+								class="relative inline-flex h-6 w-10 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-300 ease-in-out focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75"
+							>
+								<span
+									aria-hidden="true"
+									:class="test.isAllDay ? 'translate-x-4' : 'translate-x-0'"
+									class="pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow-lg ring-0 transition duration-300 ease-in-out"
+								/>
+							</Switch>
+						</div>
+						<input v-model="test.start" type="date" placeholder="20/20/2020" />
+						<input v-model="test.end" type="date" placeholder="20/20/2020" />
 					</div>
 				</div>
 			</Transition>
@@ -125,13 +161,16 @@ const { isSwiping, direction } = useSwipe(panel, {
 	</div>
 </template>
 
-<style>
+<style scoped>
+input {
+	@apply bg-transparent w-full text-white placeholder:text-white caret-cyan-500 focus-visible:outline-0;
+}
 .fade-enter-from,
 .fade-leave-to {
 	opacity: 0;
 }
 .fade-enter-active,
 .fade-leave-active {
-	transition: opacity 0.3s ease-in-out;
+	transition: opacity 0.5s ease-in-out;
 }
 </style>

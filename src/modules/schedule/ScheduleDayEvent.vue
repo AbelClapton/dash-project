@@ -32,9 +32,6 @@ function getDiff(start, end) {
 			<span class="text-center text-sm">
 				{{ event.title }}
 			</span>
-			<span class="text-center text-sm">
-				{{ styleObject.top }}
-			</span>
 		</div>
 	</div>
 </template>

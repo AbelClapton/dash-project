@@ -14,6 +14,7 @@ const employees = ref([
 		name: 'Abel Rodriguez',
 		picture:
 			'https://www.creative-tim.com/learning-lab/tailwind-starter-kit/img/team-4-470x470.png',
+		events: [{ id: 1, start: '10:00', end: '11:00', title: 'Salón' }],
 	},
 	{ id: 2, name: 'Dassiel Morales' },
 	{ id: 3, name: 'Denzel Companioni' },
