@@ -17,12 +17,12 @@ const event = computed({
 const emit = defineEmits(['input'])
 
 const top = computed(() => {
-	const [h, m] = event.value.start.split(':').map((e) => parseInt(e))
+	const [h, m] = event.value.start.time.split(':').map((e) => parseInt(e))
 	return `${h * 3 + m * 0.05}rem`
 })
 
 const height = computed(() => {
-	const diff = getDiff(event.value.start, event.value.end)
+	const diff = getDiff(event.value.start.time, event.value.end.time)
 	const h = (diff / (15 * 60 * 1000)) * 0.75
 	return `${h}rem`
 })
@@ -65,7 +65,7 @@ const {
 
 		if (Math.abs(delta)) {
 			startStart.y += delta * 12
-			event.value.start = addTime(event.value.start, delta)
+			event.value.start.time = addTime(event.value.start.time, delta)
 		}
 	},
 })
@@ -84,7 +84,7 @@ const {
 
 		if (Math.abs(delta)) {
 			endStart.y += delta * 12
-			event.value.end = addTime(event.value.end, delta)
+			event.value.end.time = addTime(event.value.end.time, delta)
 		}
 	},
 })
@@ -99,8 +99,8 @@ const { coordsStart, coordsEnd } = useSwipe(moveControl, {
 
 		if (Math.abs(delta) && !startSwiping.value && !endSwiping.value) {
 			coordsStart.y += delta * 12
-			event.value.start = addTime(event.value.start, delta)
-			event.value.end = addTime(event.value.end, delta)
+			event.value.start.time = addTime(event.value.start.time, delta)
+			event.value.end.time = addTime(event.value.end.time, delta)
 		}
 	},
 })

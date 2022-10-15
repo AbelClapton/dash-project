@@ -1,39 +1,28 @@
 <script setup>
 import { ref } from 'vue'
+import { EllipsisVerticalIcon } from '@heroicons/vue/24/outline'
 import { OnClickOutside } from '@vueuse/components'
+
 import ViewActionsButton from '@/components/ViewActionsButton.vue'
-defineProps({
-	action: Object,
-})
 
-const isMenuOpen = ref(false)
-
-function hideMenu() {
-	isMenuOpen.value = false
-}
-
-function showMenu() {
-	isMenuOpen.value = true
-}
+const isMenuVisible = ref(false)
+const showMenu = () => (isMenuVisible.value = true)
+const hideMenu = () => (isMenuVisible.value = false)
 </script>
 
 <template>
 	<div class="relative">
-		<ViewActionsButton :action="action" @click="showMenu" />
+		<view-actions-button @click="showMenu">
+			<ellipsis-vertical-icon class="h-7 w-7" />
+		</view-actions-button>
 		<transition name="fade">
-			<OnClickOutside
+			<on-click-outside
 				class="flex flex-col absolute top-0 right-0 bg-slate-800 shadow z-10"
-				v-if="isMenuOpen"
+				v-if="isMenuVisible"
 				@trigger="hideMenu"
 			>
-				<ViewActionsButton
-					v-for="(action, index) in action.actions"
-					:key="index"
-					:action="action"
-					@click="hideMenu"
-					expand
-				/>
-			</OnClickOutside>
+				<slot></slot>
+			</on-click-outside>
 		</transition>
 	</div>
 </template>

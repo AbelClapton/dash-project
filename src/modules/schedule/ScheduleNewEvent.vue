@@ -1,12 +1,18 @@
 <script setup>
-import { ref, computed, watch, nextTick } from 'vue'
+import { ref, computed, watch, nextTick, onMounted } from 'vue'
 import { useSwipe } from '@vueuse/core'
+
+import { useCategoriesStore } from '@/modules/categories/store'
+import { useServicesStore } from '@/modules/services/store'
+
 import { Switch } from '@headlessui/vue'
 import {
 	XMarkIcon,
 	ChevronDownIcon,
 	ChevronUpIcon,
 	ClockIcon,
+	UserIcon,
+	TicketIcon,
 } from '@heroicons/vue/24/outline'
 
 // props
@@ -21,28 +27,30 @@ const event = computed({
 	get: () => props.modelValue,
 	set: (value) => emit('update:modelValue', value),
 })
+
 // emits
 const emit = defineEmits(['dispose'])
 
-// data
+// initialize stores
+const categoriesStore = useCategoriesStore()
+const servicesStore = useServicesStore()
+
+// TODO: Make composable
 const panel = ref(null)
-const top = ref(0)
+const top = ref(600)
 const offset = ref(0)
 const titleInput = ref(null)
 const bgColor = computed(() =>
 	currentBreakpoint.value ? 'bg-neutral-600' : 'bg-neutral-800'
 )
 const breakpoints = [0, 600, 725]
-let currentBreakpoint = ref(0)
-
-// methods
+let currentBreakpoint = ref(1)
 const nextBreakpoint = () => {
 	if (currentBreakpoint.value < 2) currentBreakpoint.value++
 }
 const previousBreakpoint = () => {
 	if (currentBreakpoint.value) currentBreakpoint.value--
 }
-
 watch(currentBreakpoint, (newBreakpoint) => {
 	top.value = breakpoints[newBreakpoint]
 	if (newBreakpoint === 0)
@@ -71,10 +79,9 @@ const { direction } = useSwipe(panel, {
 	},
 })
 
-const test = ref({
-	start: '2022-10-14',
-	end: '2022-10-14',
-	isAllDay: true,
+onMounted(async () => {
+	categoriesStore.fetchAll()
+	servicesStore.fetchAll()
 })
 </script>
 
@@ -118,7 +125,7 @@ const test = ref({
 						<div class="w-full bg-transparent text-2xl">
 							{{ event.title || 'Añade un título' }}
 						</div>
-						<p>Hoy &#8226; {{ event.start }} - {{ event.end }}</p>
+						<p>Hoy &#8226; {{ event.start.time }} - {{ event.end.time }}</p>
 					</div>
 				</div>
 
@@ -141,19 +148,82 @@ const test = ref({
 							<ClockIcon class="w-7 h-7" />
 							<span class="text-lg flex-grow">Todo el día</span>
 							<Switch
-								v-model="test.isAllDay"
-								:class="test.isAllDay ? 'bg-cyan-500' : 'bg-neutral-500'"
+								v-model="event.isAllDay"
+								:class="event.isAllDay ? 'bg-cyan-500' : 'bg-neutral-500'"
 								class="relative inline-flex h-6 w-10 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-300 ease-in-out focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75"
 							>
 								<span
 									aria-hidden="true"
-									:class="test.isAllDay ? 'translate-x-4' : 'translate-x-0'"
+									:class="event.isAllDay ? 'translate-x-4' : 'translate-x-0'"
 									class="pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow-lg ring-0 transition duration-300 ease-in-out"
 								/>
 							</Switch>
 						</div>
-						<input v-model="test.start" type="date" placeholder="20/20/2020" />
-						<input v-model="test.end" type="date" placeholder="20/20/2020" />
+
+						<!-- Time -->
+						<div class="w-full flex flex-col gap-2 pl-6 -mr-10">
+							<div class="flex gap-3 justify-between">
+								<input v-model="event.start.date" type="date" />
+								<input
+									class="inline-flex w-4 p-0"
+									v-model="event.start.time"
+									type="time"
+								/>
+							</div>
+							<div class="flex gap-3 justify-between">
+								<input v-model="event.end.date" type="date" />
+								<input v-model="event.end.time" type="time" />
+							</div>
+						</div>
+					</div>
+					<hr class="border-gray-500" />
+
+					<!-- Client -->
+					<div class="flex flex-col gap-3 px-6 py-1">
+						<div class="flex gap-5">
+							<UserIcon class="h-7 w-7" />
+							<input
+								class="placeholder:text-gray-500"
+								v-model="event.client.name"
+								type="text"
+								placeholder="Nombre del Cliente"
+							/>
+						</div>
+						<div class="flex px-12">
+							<input
+								v-model="event.client.phone"
+								type="text"
+								placeholder="Telefono del Cliente"
+							/>
+						</div>
+					</div>
+					<hr class="border-gray-500" />
+
+					<!-- Service -->
+					<div class="w-full flex px-6 py-1">
+						<div class="w-full flex gap-5">
+							<div class="w-7">
+								<TicketIcon class="h-7 w-7" />
+							</div>
+							<select class="w-full" v-model="event.service.categoryId">
+								<option
+									v-for="category in categoriesStore.categories"
+									:key="category.id"
+									:value="category.id"
+								>
+									{{ category.name }}
+								</option>
+							</select>
+							<select class="w-full">
+								<option
+									v-for="service in servicesStore.services"
+									:key="service.id"
+									:value="service.id"
+								>
+									{{ service.name }}
+								</option>
+							</select>
+						</div>
 					</div>
 				</div>
 			</Transition>
@@ -163,7 +233,7 @@ const test = ref({
 
 <style scoped>
 input {
-	@apply bg-transparent w-full text-white placeholder:text-white caret-cyan-500 focus-visible:outline-0;
+	@apply bg-transparent text-white placeholder:text-white caret-cyan-500 focus-visible:outline-0;
 }
 .fade-enter-from,
 .fade-leave-to {
@@ -172,5 +242,10 @@ input {
 .fade-enter-active,
 .fade-leave-active {
 	transition: opacity 0.5s ease-in-out;
+}
+
+input[type='time'] {
+	max-width: none !important;
+	width: 4.2rem;
 }
 </style>

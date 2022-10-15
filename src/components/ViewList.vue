@@ -1,11 +1,11 @@
 <script setup>
-import { ref, watch } from 'vue'
+import { ref, computed, watch } from 'vue'
 import BaseSpinner from '@/components/base/BaseSpinner.vue'
 import ViewListItem from '@/components/ViewListItem.vue'
 import { TrashIcon, ChevronLeftIcon } from '@heroicons/vue/24/outline'
 import BaseAccordion from './base/BaseAccordion.vue'
 
-defineProps({
+const props = defineProps({
 	items: {
 		type: Array,
 		default() {
@@ -26,10 +26,18 @@ defineProps({
 		type: Boolean,
 		default: false,
 	},
+	isSelecting: {
+		type: Boolean,
+		default: false,
+	},
 })
-const emit = defineEmits(['delete'])
+const emit = defineEmits(['delete', 'update:isSelecting'])
 
-const isSelectModeOn = ref(false)
+const isSelectModeOn = computed({
+	get: () => props.isSelecting,
+	set: (value) => emit('update:isSelecting', value),
+})
+
 const selectedItems = ref([])
 
 function selectOn(id) {
@@ -71,7 +79,7 @@ watch(selectedItems, (newValue) => {
 		<!-- TODO: Layout - from top to max height -->
 		<!-- Simple View -->
 		<div
-			class="flex flex-col gap-1 overflow-y-auto overflow-x-hidden h-full w-full my-2 -mx-2"
+			class="flex flex-col gap-1.5 overflow-y-auto overflow-x-hidden h-full w-full my-2"
 			v-auto-animate
 			v-else-if="items.length && !groups"
 		>
@@ -91,7 +99,7 @@ watch(selectedItems, (newValue) => {
 
 		<!-- Group View -->
 		<div
-			class="flex flex-col gap-4 overflow-y-auto overflow-x-hidden h-full w-full my-2 -mx-2"
+			class="flex flex-col gap-4 overflow-y-auto overflow-x-hidden h-full w-full my-2"
 			v-auto-animate
 			v-else-if="items.length && groups"
 		>

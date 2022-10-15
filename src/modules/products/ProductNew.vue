@@ -1,0 +1,3 @@
+<template>
+	<div class="w-full h-full bg-neutral-600"></div>
+</template>

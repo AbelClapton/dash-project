@@ -1,5 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import HomeView from '../views/HomeView.vue'
+import schedule from '@/modules/schedule/routes.js'
+import products from '@/modules/products/routes.js'
 
 const router = createRouter({
 	history: createWebHistory(import.meta.env.BASE_URL),
@@ -7,28 +8,9 @@ const router = createRouter({
 		{
 			path: '/',
 			name: 'inicio',
-			component: HomeView,
+			component: () => import('../views/HomeView.vue'),
 		},
-		{
-			path: '/products',
-			name: 'products',
-			component: () => import('../views/InventoryView.vue'),
-		},
-		{
-			path: '/products/:id',
-			name: 'product',
-			component: () => import('../views/ProductView.vue'),
-		},
-		{
-			path: '/add-product',
-			name: 'new product',
-			component: () => import('../views/NewProductView.vue'),
-		},
-		{
-			path: '/products/:id/edit',
-			name: 'edit product',
-			component: () => import('../views/NewProductView.vue'),
-		},
+		...products,
 		{
 			path: '/brands',
 			name: 'brands',
@@ -80,21 +62,6 @@ const router = createRouter({
 			component: () => import('../views/ServiceView.vue'),
 		},
 		{
-			path: '/schedule/day/',
-			name: 'schedule-day',
-			component: () => import('../modules/schedule/ScheduleDay.vue'),
-		},
-		{
-			path: '/schedule/add-schedule/',
-			name: 'add-schedule',
-			component: () => import('../modules/schedule/ScheduleNew.vue'),
-		},
-		{
-			path: '/schedule/events/:id',
-			name: 'event-details',
-			component: () => import('../modules/schedule/ScheduleEventDetails.vue'),
-		},
-		{
 			path: '/modules',
 			name: 'modules',
 			component: () => import('../views/ModulesView.vue'),
@@ -104,6 +71,7 @@ const router = createRouter({
 			name: 'not_found',
 			component: () => import('../views/NotFound404View.vue'),
 		},
+		...schedule,
 	],
 })
 

@@ -60,7 +60,7 @@ defineEmits(['dispose'])
 						<span>Finanzas</span>
 					</router-link>
 					<router-link
-						to="/schedule/day"
+						to="/schedule"
 						class="flex items-center gap-4 hover:bg-slate-600 px-6 py-3"
 						@click="$emit('dispose')"
 					>
