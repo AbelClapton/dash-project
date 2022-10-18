@@ -47,7 +47,7 @@ watch(
 
 <template>
 	<div
-		class="w-full flex justify-between items-center p-4 rounded"
+		class="w-full flex justify-between items-center rounded"
 		:class="[isSelected ? 'bg-cyan-600' : 'bg-slate-800']"
 		v-touch:hold="enterSelectMode"
 		@click="clicked"

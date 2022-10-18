@@ -20,6 +20,7 @@ const hideMenu = () => (isMenuVisible.value = false)
 				class="flex flex-col absolute top-0 right-0 bg-slate-800 shadow z-10"
 				v-if="isMenuVisible"
 				@trigger="hideMenu"
+				@click="hideMenu"
 			>
 				<slot></slot>
 			</on-click-outside>

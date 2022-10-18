@@ -1,6 +1,8 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import schedule from '@/modules/schedule/routes.js'
-import products from '@/modules/products/routes.js'
+import schedule from '@/modules/schedule/routes'
+import products from '@/modules/products/routes'
+import brands from '@/modules/brands/routes'
+import employees from '@/modules/employees/routes'
 
 const router = createRouter({
 	history: createWebHistory(import.meta.env.BASE_URL),
@@ -11,11 +13,8 @@ const router = createRouter({
 			component: () => import('../views/HomeView.vue'),
 		},
 		...products,
-		{
-			path: '/brands',
-			name: 'brands',
-			component: () => import('../views/BrandsView.vue'),
-		},
+		...brands,
+		...employees,
 		{
 			path: '/categories',
 			name: 'categories',
@@ -25,31 +24,6 @@ const router = createRouter({
 			path: '/login',
 			name: 'login',
 			component: () => import('../views/LoginView.vue'),
-		},
-		{
-			path: '/calendar',
-			name: 'calendar',
-			component: () => import('../views/CalendarView.vue'),
-		},
-		{
-			path: '/employees',
-			name: 'employees',
-			component: () => import('../views/EmployeesView.vue'),
-		},
-		{
-			path: '/employees/:id',
-			name: 'employee',
-			component: () => import('../views/EmployeeView.vue'),
-		},
-		{
-			path: '/employees/:id/edit',
-			name: 'edit employee',
-			component: () => import('../views/NewEmployeeView.vue'),
-		},
-		{
-			path: '/add-employee',
-			name: 'new employee',
-			component: () => import('../views/NewEmployeeView.vue'),
 		},
 		{
 			path: '/services',

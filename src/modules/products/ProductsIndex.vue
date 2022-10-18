@@ -1,7 +1,6 @@
 <script setup>
 import { ref, computed, onMounted } from 'vue'
-import { useProductsStore } from '@/modules/products/store'
-import { ArrowPathIcon } from '@heroicons/vue/24/outline'
+import { ArrowPathIcon, TagIcon } from '@heroicons/vue/24/outline'
 
 import ViewList from '@/components/ViewList.vue'
 import ViewActions from '@/components/ViewActions.vue'
@@ -9,34 +8,43 @@ import ViewActionsButton from '@/components/ViewActionsButton.vue'
 import ViewActionsMenu from '@/components/ViewActionsMenu.vue'
 import FloatingButton from '@/components/FloatingButton.vue'
 import SearchInput from '@/components/SearchInput.vue'
+import ProductListItem from '@/modules/products/ProductListItem.vue'
+
+import { useProductsStore } from '@/modules/products/store'
+import { useBrandsStore } from '@/modules/brands/store'
 
 const productsStore = useProductsStore()
+const brandsStore = useBrandsStore()
 
+// TODO: Make into a composable
 const filters = ref({
 	name: '',
 })
 
+const isSelecting = ref(false)
+const isLoading = computed(() => productsStore.loading || brandsStore.loading)
+
 const products = computed(() => {
-	let products = productsStore.products
-
-	for (const filter in filters.value) {
-		products = products.filter(
-			(p) =>
-				p[filter].toLowerCase().indexOf(filters.value[filter].toLowerCase()) >=
-				0
+	return productsStore.products
+		.filter(
+			(p) => p.name.toLowerCase().indexOf(filters.value.name.toLowerCase()) >= 0
 		)
-	}
-
-	return products
+		.map((p) => ({ ...p, brand: brandsStore.get(p.brandId).name }))
 })
 
-const isSelecting = ref(false)
-
 // methods
-const refresh = async () => await productsStore.fetchAll()
+const fetchProducts = async () => {
+	await productsStore.fetchAll()
+}
+
+// TODO: separate loader for trash button to display list animation instead of loader
+const remove = async (id, name) => {
+	if (!confirm('Desea eliminar el producto ' + name + '?')) return
+	productsStore.remove(id)
+}
 
 onMounted(async () => {
-	productsStore.fetchAll()
+	await fetchProducts()
 })
 </script>
 
@@ -47,8 +55,15 @@ onMounted(async () => {
 		<template #actions>
 			<view-actions>
 				<view-actions-menu>
-					<view-actions-button label="Actualizar" @click="refresh">
+					<view-actions-button label="Actualizar" @click="fetchProducts">
 						<arrow-path-icon class="h-7 w-7" />
+					</view-actions-button>
+					<hr class="border-t-gray-500 border-t-[0.025rem]" />
+					<view-actions-button
+						label="Marcas"
+						@click="$router.push({ path: '/brands' })"
+					>
+						<tag-icon class="h-7 w-7" />
 					</view-actions-button>
 				</view-actions-menu>
 			</view-actions>
@@ -56,13 +71,15 @@ onMounted(async () => {
 
 		<template #content>
 			<div class="px-4">
-				<search-input v-model="filters.name" v-if="productsStore.products" />
+				<search-input v-model="filters.name" v-if="products" />
 				<view-list
 					:items="products"
-					:loading="productsStore.loading"
+					:loading="isLoading"
 					v-model:isSelecting="isSelecting"
 				>
-					<template #item-body="{ item }"> {{ item.name }} </template>
+					<template #item-body="{ item }">
+						<product-list-item :product="item" @remove="remove" />
+					</template>
 				</view-list>
 			</div>
 

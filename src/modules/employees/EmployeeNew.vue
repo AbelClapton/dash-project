@@ -1,10 +1,8 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import { useEmployeesStore } from '@/stores/employees.js'
+import { useEmployeesStore } from '@/modules/employees/store'
 import { useServicesStore } from '@/stores/services.js'
-import BaseInput from '@/components/base/BaseInput.vue'
-import BaseListBox from '@/components/base/BaseListBox.vue'
 
 const employeesStore = useEmployeesStore()
 const servicesStore = useServicesStore()

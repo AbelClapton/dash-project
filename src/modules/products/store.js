@@ -36,7 +36,7 @@ export const useProductsStore = defineStore({
 
 			if (!error) {
 				const index = this.products.findIndex((e) => e.id == product.id)
-				this.products[index].name = product.name
+				this.products[index] = { ...product }
 			}
 			this.loading = false
 		},

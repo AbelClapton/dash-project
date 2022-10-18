@@ -1,8 +1,15 @@
 <script setup>
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
+import { useBrandsStore } from '@/modules/brands/store'
 import TheNavbar from '@/components/TheNavbar.vue'
 
 const showNavbar = ref(false)
+
+onMounted(async () => {
+	const brandsStore = useBrandsStore()
+
+	brandsStore.fetchAll()
+})
 </script>
 
 <template>

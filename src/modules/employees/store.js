@@ -7,16 +7,21 @@ export const useEmployeesStore = defineStore({
 	id: 'employees',
 	state: () => ({
 		employees: [],
+		loading: false,
 	}),
 	actions: {
 		async fetchAll() {
+			this.loading = true
 			let { data: employees, error } = await supabase
 				.from('employees')
 				.select('*')
 			if (error) return error
 			this.employees = employees
+			this.loading = false
 		},
+
 		async save(employee) {
+			this.loading = true
 			let { data, error } = await supabase.from('employees').insert([
 				{
 					name: employee.name,
@@ -39,8 +44,11 @@ export const useEmployeesStore = defineStore({
 				return error
 			}
 			this.employees.push(employee)
+			this.loading = false
 		},
+
 		async update(employee) {
+			this.loading = true
 			let { error } = await supabase
 				.from('employees')
 				.update({ name: employee.name, phone: employee.phone })
@@ -70,13 +78,18 @@ export const useEmployeesStore = defineStore({
 			if (error) return error
 			this.employees[this.employees.findIndex((e) => e.id == employee.id)] =
 				employee
+			this.loading = false
 		},
+
 		async delete(id) {
+			this.loading = true
 			const { error } = await supabase.from('employees').delete().eq('id', id)
 			if (error) return error
 			this.employees = this.employees.filter((e) => e.id == id)
+			this.loading = false
 		},
 	},
+
 	getters: {
 		get: (state) => (id) => state.employees.find((e) => e.id == id),
 	},
