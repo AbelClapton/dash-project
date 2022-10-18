@@ -3,8 +3,6 @@ import { ref, onMounted, computed } from 'vue'
 import { useRoute } from 'vue-router'
 import { useRouter } from 'vue-router'
 import { onClickOutside } from '@vueuse/core'
-import { useServicesStore } from '@/stores/services.js'
-import { useModulesStore } from '@/stores/modules.js'
 import {
 	EllipsisVerticalIcon,
 	PencilIcon,
@@ -12,15 +10,17 @@ import {
 	PlusIcon,
 	CurrencyDollarIcon,
 } from '@heroicons/vue/24/outline'
-import BaseInput from '@/components/base/BaseInput.vue'
+
+import { useServicesStore } from '@/stores/services.js'
+import { useModulesStore } from '@/stores/modules.js'
 
 const route = useRoute()
 const router = useRouter()
-
 const servicesStore = useServicesStore()
+const modulesStore = useModulesStore()
+
 const service = servicesStore.get(route.params.id)
 
-const modulesStore = useModulesStore()
 const modules = computed(() =>
 	modulesStore.modules.filter((m) => m.service == service.id)
 )
@@ -30,10 +30,6 @@ const optionsMenu = ref(null)
 onClickOutside(optionsMenu, () => (isOptionsVisible.value = false))
 
 const isModalOpen = ref(false)
-const modal = ref(null)
-onClickOutside(modal, () => {
-	isModalOpen.value = false
-})
 
 const serviceName = ref('')
 
@@ -157,45 +153,34 @@ onMounted(() => {
 			</transition>
 		</div>
 
-		<Teleport to="#modal">
-			<div
-				class="fixed top-0 left-0 w-screen h-screen bg-black/50 flex justify-center items-center"
-				v-if="isModalOpen"
-			>
-				<div class="relative bg-gray-800 p-10 rounded shadow-sm" ref="modal">
-					<div v-if="showModal == 'editService'" class="flex flex-col gap-2">
-						<div class="text-lg font-medium text-white">Editar Servicio</div>
-						<BaseInput
-							v-model="serviceName"
-							placeholder="Nombre del servicio"
-							ref="editServiceName"
-						/>
-						<button
-							class="bg-cyan-500 text-lg font-medium text-white py-3 px-6 rounded-lg"
-							@click="save"
-						>
-							Guardar
-						</button>
-					</div>
-
-					<div v-else-if="showModal == 'addModule'" class="flex flex-col gap-3">
-						<div class="text-lg pb-3 font-medium text-white">Nuevo Paquete</div>
-						<BaseInput v-model="module.name" placeholder="Nombre del paquete" />
-						<BaseInput
-							v-model="module.price"
-							type="number"
-							placeholder="Precio"
-						/>
-						<button
-							class="bg-cyan-500 text-lg font-medium text-white mt-6 py-3 px-6 rounded-lg"
-							@click="save"
-						>
-							Guardar
-						</button>
-					</div>
-				</div>
+		<base-modal v-model="isModalOpen">
+			<div v-if="showModal == 'editService'" class="flex flex-col gap-2">
+				<div class="text-lg font-medium text-white">Editar Servicio</div>
+				<BaseInput
+					v-model="serviceName"
+					placeholder="Nombre del servicio"
+					ref="editServiceName"
+				/>
+				<button
+					class="bg-cyan-500 text-lg font-medium text-white py-3 px-6 rounded-lg"
+					@click="save"
+				>
+					Guardar
+				</button>
 			</div>
-		</Teleport>
+
+			<div v-else-if="showModal == 'addModule'" class="flex flex-col gap-3">
+				<div class="text-lg pb-3 font-medium text-white">Nuevo Paquete</div>
+				<BaseInput v-model="module.name" placeholder="Nombre del paquete" />
+				<BaseInput v-model="module.price" type="number" placeholder="Precio" />
+				<button
+					class="bg-cyan-500 text-lg font-medium text-white mt-6 py-3 px-6 rounded-lg"
+					@click="save"
+				>
+					Guardar
+				</button>
+			</div>
+		</base-modal>
 	</div>
 </template>
 

@@ -5,7 +5,7 @@ defineEmits(['toggleNavbar'])
 </script>
 
 <template>
-	<div class="h-full flex flex-col mt-1">
+	<div class="h-full flex flex-col pb-3">
 		<!-- View Header -->
 		<div class="h-8 flex items-center justify-start m-4 gap-3">
 			<button class="grid place-content-center" @click="$emit('toggleNavbar')">
@@ -20,7 +20,7 @@ defineEmits(['toggleNavbar'])
 		</div>
 
 		<!-- View Content -->
-		<div class="h-full overflow-hidden">
+		<div class="h-full overflow-x-hidden overflow-y-auto">
 			<slot name="content"></slot>
 		</div>
 	</div>

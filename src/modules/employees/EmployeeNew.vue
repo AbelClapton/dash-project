@@ -30,29 +30,26 @@ onMounted(() => {
 </script>
 
 <template>
-	<div>
+	<div class="p-6">
 		<h1 class="font-medium text-lg">
 			{{ route.params.id ? 'Editar' : 'Nuevo' }} Empleado
 		</h1>
 		<br />
-		<form
-			class="p-2 flex flex-col justify-between gap-4"
-			@submit.prevent="save"
-		>
+		<form class="flex flex-col justify-between gap-4" @submit.prevent="save">
 			<div class="flex flex-col gap-4">
-				<BaseInput
+				<base-input
 					label="Nombre"
 					type="text"
 					placeholder="Nombre del empleado"
 					v-model="employee.name"
 				/>
-				<BaseInput
+				<base-input
 					label="Teléfono"
 					type="text"
 					placeholder="Teléfono"
 					v-model="employee.phone"
 				/>
-				<BaseListBox
+				<base-list-box
 					label="Servicios"
 					:options="servicesStore.services"
 					v-model="employee.services"

@@ -2,7 +2,9 @@ import { createRouter, createWebHistory } from 'vue-router'
 import schedule from '@/modules/schedule/routes'
 import products from '@/modules/products/routes'
 import brands from '@/modules/brands/routes'
+import categories from '@/modules/categories/routes'
 import employees from '@/modules/employees/routes'
+import services from '@/modules/services/routes'
 
 const router = createRouter({
 	history: createWebHistory(import.meta.env.BASE_URL),
@@ -12,29 +14,17 @@ const router = createRouter({
 			name: 'inicio',
 			component: () => import('../views/HomeView.vue'),
 		},
-		...products,
-		...brands,
-		...employees,
-		{
-			path: '/categories',
-			name: 'categories',
-			component: () => import('../views/CategoriesView.vue'),
-		},
 		{
 			path: '/login',
 			name: 'login',
 			component: () => import('../views/LoginView.vue'),
 		},
-		{
-			path: '/services',
-			name: 'services',
-			component: () => import('../views/ServicesView.vue'),
-		},
-		{
-			path: '/services/:id',
-			name: 'service-details',
-			component: () => import('../views/ServiceView.vue'),
-		},
+		...products,
+		...brands,
+		...categories,
+		...employees,
+		...services,
+		...schedule,
 		{
 			path: '/modules',
 			name: 'modules',
@@ -45,7 +35,6 @@ const router = createRouter({
 			name: 'not_found',
 			component: () => import('../views/NotFound404View.vue'),
 		},
-		...schedule,
 	],
 })
 
