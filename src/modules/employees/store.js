@@ -14,8 +14,11 @@ export const useEmployeesStore = defineStore({
 			this.loading = true
 			let { data: employees, error } = await supabase
 				.from('employees')
-				.select('*')
+				.select('*, services:employees_services(serviceId)')
 			if (error) return error
+			employees.forEach((e) => {
+				e.services = e.services.map((s) => s.serviceId)
+			})
 			this.employees = employees
 			this.loading = false
 		},

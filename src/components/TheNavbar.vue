@@ -1,17 +1,23 @@
 <script setup>
+import { ref } from 'vue'
 import { RouterLink } from 'vue-router'
 import {
 	CalendarDaysIcon,
-	TagIcon,
-	ShoppingBagIcon,
 	UserGroupIcon,
 	BanknotesIcon,
 	ArchiveBoxIcon,
 	TicketIcon,
-	RectangleStackIcon,
 } from '@heroicons/vue/24/outline'
 
 defineEmits(['dispose'])
+
+const links = ref([
+	{ label: 'Inventario', to: '/products', icon: ArchiveBoxIcon },
+	{ label: 'Finanzas', to: '/finances', icon: BanknotesIcon },
+	{ label: 'Reservaciones', to: '/schedule', icon: CalendarDaysIcon },
+	{ label: 'Empleados', to: '/employees', icon: UserGroupIcon },
+	{ label: 'Servicios', to: '/services', icon: TicketIcon },
+])
 </script>
 
 <template>
@@ -28,68 +34,14 @@ defineEmits(['dispose'])
 						</button>
 					</div>
 					<router-link
-						to="/products"
+						v-for="link in links"
+						:key="link.label"
+						:to="link.to"
 						class="flex items-center gap-4 hover:bg-slate-600 px-6 py-3"
 						@click="$emit('dispose')"
 					>
-						<ArchiveBoxIcon class="h-5 w-5" />
-						<span>Inventario</span>
-					</router-link>
-					<router-link
-						to="/brands"
-						class="flex items-center gap-4 hover:bg-slate-600 px-6 py-3"
-						@click="$emit('dispose')"
-					>
-						<ShoppingBagIcon class="h-5 w-5" />
-						<span>Marcas</span>
-					</router-link>
-					<router-link
-						to="/categories"
-						class="flex items-center gap-4 hover:bg-slate-600 px-6 py-3"
-						@click="$emit('dispose')"
-					>
-						<TagIcon class="h-5 w-5" />
-						<span>Categorías</span>
-					</router-link>
-					<router-link
-						to="/finance"
-						class="flex items-center gap-4 hover:bg-slate-600 px-6 py-3"
-						@click="$emit('dispose')"
-					>
-						<BanknotesIcon class="h-5 w-5" />
-						<span>Finanzas</span>
-					</router-link>
-					<router-link
-						to="/schedule"
-						class="flex items-center gap-4 hover:bg-slate-600 px-6 py-3"
-						@click="$emit('dispose')"
-					>
-						<CalendarDaysIcon class="h-5 w-5" />
-						<span>Reservaciones</span>
-					</router-link>
-					<router-link
-						to="/employees"
-						class="flex items-center gap-4 hover:bg-slate-600 px-6 py-3"
-						@click="$emit('dispose')"
-					>
-						<UserGroupIcon class="h-5 w-5" />
-						<span>Empleados</span>
-					</router-link>
-					<router-link
-						to="/services"
-						class="flex items-center gap-4 hover:bg-slate-600 px-6 py-3"
-						@click="$emit('dispose')"
-					>
-						<TicketIcon class="h-5 w-5" />
-						<span>Servicios</span>
-					</router-link>
-					<router-link
-						to="/modules"
-						class="flex items-center gap-4 hover:bg-slate-600 px-6 py-3"
-						@click="$emit('dispose')"
-					>
-						<RectangleStackIcon class="h-5 w-5" />
-						<span>Paquetes</span>
+						<component :is="link.icon" class="h-5 w-5" />
+						<span>{{ link.label }}</span>
 					</router-link>
 				</div>
 			</div>

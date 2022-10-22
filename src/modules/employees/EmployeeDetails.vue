@@ -1,66 +1,78 @@
 <script setup>
-import { ref } from 'vue'
-import { useRoute } from 'vue-router'
+import { computed } from 'vue'
 import { useRouter } from 'vue-router'
-import { onClickOutside } from '@vueuse/core'
+import { PencilIcon, TrashIcon } from '@heroicons/vue/24/outline'
+
+// custom components
+import ViewActions from '@/components/ViewActions.vue'
+import ViewActionsMenu from '@/components/ViewActionsMenu.vue'
+import ViewActionsButton from '@/components/ViewActionsButton.vue'
+
+// custom composables
 import { useEmployeesStore } from '@/modules/employees/store'
-import {
-	EllipsisVerticalIcon,
-	PencilIcon,
-	TrashIcon,
-} from '@heroicons/vue/24/outline'
+import { useServicesStore } from '@/modules/services/store'
 
+// init plugins
 const employeesStore = useEmployeesStore()
-const route = useRoute()
+const servicesStore = useServicesStore()
 const router = useRouter()
-const employee = employeesStore.get(route.params.id)
 
-const isOptionsVisible = ref(false)
-const optionsMenu = ref(null)
-onClickOutside(optionsMenu, () => (isOptionsVisible.value = false))
+const props = defineProps({
+	id: {
+		type: String,
+		required: true,
+	},
+})
+
+const employee = computed(() => {
+	return employeesStore.get(props.id)
+})
+
+const services = computed(() => {
+	return employee.value.services.map((s) => servicesStore.get(s))
+})
 
 const edit = () => {
-	router.push({ path: `/employees/${employee.id}/edit` })
+	router.push({ path: `/employees/${employee.value.id}/edit` })
 }
 
 const remove = () => {
-	employeesStore.delete(employee.id)
+	employeesStore.delete(employee.value.id)
 	router.back()
 }
 </script>
 
 <template>
-	<div class="flex items-center justify-between">
-		<div class="text-lg font-semibold h-5">
-			{{ employee.name }}
-		</div>
-		<div class="flex items-center gap-2">
-			<div class="relative">
-				<EllipsisVerticalIcon
-					class="h-7 w-7 p-1 rounded hover:bg-gray-600"
-					@click="isOptionsVisible = true"
-				/>
-				<div
-					class="absolute right-0 top-0 flex flex-col shadow-lg shadow-gray-900 bg-gray-800"
-					ref="optionsMenu"
-					v-show="isOptionsVisible"
-				>
-					<button
-						class="w-full flex items-center gap-3 px-5 py-2.5"
-						@click="edit"
-					>
-						<PencilIcon class="h-5 w-5" />
-						<div class="">Editar</div>
-					</button>
-					<button
-						class="w-full flex items-center gap-3 px-5 py-2.5"
-						@click="remove"
-					>
-						<TrashIcon class="h-5 w-5 text-red-500" />
-						<div class="">Eliminar</div>
-					</button>
+	<base-view>
+		<template #actions>
+			<view-actions>
+				<view-actions-menu>
+					<view-actions-button label="Editar" @click="edit">
+						<pencil-icon class="h-5 w-5" />
+					</view-actions-button>
+					<view-actions-button label="Remover" @click="remove">
+						<trash-icon class="h-5 w-5 text-red-500" />
+					</view-actions-button>
+				</view-actions-menu>
+			</view-actions>
+		</template>
+
+		<template #content>
+			<div class="px-4 h-full flex flex-col gap-3">
+				<div>
+					<base-avatar :user="employee" />
+				</div>
+				<div>Telefono: {{ employee.phone }}</div>
+				<div class="relative flex border border-gray-500 py-3 px-4">
+					<span class="absolute -mt-6 -ml-1 px-1 bg-slate-900"> Habilidades </span>
+					<div v-if="services.length">
+						<div v-for="service in services" :key="service.id">
+							{{ service.name }} - {{ service.category }}
+						</div>
+					</div>
+					<div v-else>No atiende ningun servicio</div>
 				</div>
 			</div>
-		</div>
-	</div>
+		</template>
+	</base-view>
 </template>

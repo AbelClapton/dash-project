@@ -1,14 +1,18 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 import { useBrandsStore } from '@/modules/brands/store'
+import { useServicesStore } from '@/modules/services/store'
+
 import TheNavbar from '@/components/TheNavbar.vue'
 
 const showNavbar = ref(false)
 
 onMounted(async () => {
 	const brandsStore = useBrandsStore()
+	const servicesStore = useServicesStore()
 
-	brandsStore.fetchAll()
+	await servicesStore.fetchAll()
+	await brandsStore.fetchAll()
 })
 </script>
 

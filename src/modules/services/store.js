@@ -15,7 +15,8 @@ export const useServicesStore = defineStore({
 			let { data: services, error } = await supabase
 				.from('services')
 				.select('*')
-			if (!error) this.services = services
+			if (error) console.log(error)
+			else this.services = services
 			this.loading = false
 		},
 
@@ -42,11 +43,11 @@ export const useServicesStore = defineStore({
 		async delete(id) {
 			this.loading = true
 			const { error } = await supabase.from('services').delete().eq('id', id)
-			if (!error) this.services = this.services.filter((e) => e.id != id)
+			if (!error) this.services = this.services.filter((s) => s.id != id)
 			this.loading = false
 		},
 	},
 	getters: {
-		get: (state) => (id) => state.services.find((e) => e.id == id),
+		get: (state) => (id) => state.services.find((s) => s.id == id),
 	},
 })

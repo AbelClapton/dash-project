@@ -8,6 +8,7 @@ export default [
 		path: '/employees/:id',
 		name: 'employee-details',
 		component: () => import('@/modules/employees/EmployeeDetails.vue'),
+		props: true,
 	},
 	{
 		path: '/employees/:id/edit',

@@ -12,7 +12,7 @@ defineEmits(['toggleNavbar'])
 				<Bars3Icon class="h-7 w-7" />
 			</button>
 			<div class="flex-grow flex items-center text-xl font-normal h-5">
-				<slot name="header">View Name</slot>
+				<slot name="header"></slot>
 			</div>
 			<div class="flex items-center gap-3">
 				<slot name="actions"></slot>
